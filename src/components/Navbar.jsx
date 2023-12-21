@@ -1,11 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-// NavLink comes with an isactive prop which we can use to detect which page we on
-// so we can have a special style for that link
-import React from "react";
 import Logo from "../images/logo.png";
 import { links } from "../data";
-import { GoThreeBars } from "react-icons/go";
+import { FaBars } from 'react-icons/fa';
 import { MdOutlineClose } from "react-icons/md";
 import "./navbar.css";
 
@@ -41,7 +38,7 @@ const Navbar = () => {
 					})}
 				</ul>
 				<button onClick={handleNavToggle} className="nav__toggle-btn">
-					{isNavShowing ? <MdOutlineClose /> : <GoThreeBars />}
+					{isNavShowing ? <MdOutlineClose /> : <FaBars />}
 				</button>
 			</div>
 		</nav>
@@ -49,5 +46,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// export PATH=$PATH:/home/daveworld/bin
