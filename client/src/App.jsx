@@ -10,6 +10,7 @@ import Plans from "./pages/plans/Plans";
 import Trainers from "./pages/trainers/Trainers";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Profile from "./pages/user/Profile";
 
 const App = () => {
 	return (
@@ -22,6 +23,7 @@ const App = () => {
 				<Route path="gallery" element={<Gallery />} />
 				<Route path="plans" element={<Plans />} />
 				<Route path="trainers" element={<Trainers />} />
+				<Route path="profile" element={<Profile />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 			<Footer />

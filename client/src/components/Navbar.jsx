@@ -5,16 +5,33 @@ import { links } from "../data";
 import { FaBars } from 'react-icons/fa';
 import { MdOutlineClose } from "react-icons/md";
 import "./navbar.css";
+import DropdownCustom from "./DropdownCustom";
+
+const items = [
+	{
+		id: 1,
+		title: "My profile",
+		path: "/profile",
+	},
+	{
+		id: 2,
+		title: "Manage Customers",
+		path: "/manage-customers",
+	},
+];
 
 const Navbar = () => {
 	const [isNavShowing, setIsNavShowing] = useState(false);
 
-	const handleNavToggle = () => {
+	function handleNavToggle() {
 		return setIsNavShowing((prevVAlue) => {
 			return !prevVAlue;
 		});
 	};
+	function handleSelectedItem(item) {
 
+		console.log(item)
+	}
 	return (
 		<nav>
 			<div className="container nav__container">
@@ -37,6 +54,9 @@ const Navbar = () => {
 						);
 					})}
 				</ul>
+				<div>
+					<DropdownCustom title={"Teo Nguyen"} items={items} onSelected={handleSelectedItem} />
+				</div>
 				<button onClick={handleNavToggle} className="nav__toggle-btn">
 					{isNavShowing ? <MdOutlineClose /> : <FaBars />}
 				</button>

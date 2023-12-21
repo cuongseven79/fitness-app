@@ -27,6 +27,10 @@ export const links = [
     {
         name: "Contact",
         path: '/contact'
+    },
+    {
+        name: "Profile",
+        path: '/profile'
     }
 ]
 
