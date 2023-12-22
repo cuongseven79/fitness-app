@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ImageUploader from "../../components/ImageUploadCustom";
-import CertDefaultImage from "../../images/cert-frame.png";
+import DefaultCertImg from "../../images/cert-frame.png";
 import UserDefaultImage from "../../images/user_profile.png";
+import axios from "axios";
 
 
 const FormField = ({ id, label, placeholder, value, onChange }) => (
@@ -12,8 +13,8 @@ const FormField = ({ id, label, placeholder, value, onChange }) => (
 );
 
 const Profile = () => {
-    const [selectedPhoto, setSelectedPhoto] = useState(null);
-    const [urlImages, setUrlImages] = useState([]);
+    const [urlAvatar, setUrlAvatar] = useState(null);
+    const [urlCerts, setUrlsCert] = useState(null);
     const [formState, setFormState] = useState({
         fullname: '',
         gender: '',
@@ -31,9 +32,11 @@ const Profile = () => {
     }
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(formState, urlImages, selectedPhoto);
-        console.log("selectedPhoto", selectedPhoto)
     }
+    console.log("urlAvatar", urlAvatar)
+    console.log("urlcert", urlCerts)
+
+
     return (
         <section className="p-10 rounded-2xl bg-white container text-black">
             <form onSubmit={(e) => handleSubmit(e)}>
@@ -47,21 +50,19 @@ const Profile = () => {
                         <FormField id="participant" label="Number of participants" placeholder="Number of participants" value={formState.participant} onChange={handleChange} />
                         <FormField id="price" label="Price" placeholder="Price" value={formState.price} onChange={handleChange} />
                     </div>
-                    <ImageUploader onUrlImages={setSelectedPhoto} defaultImage={UserDefaultImage} />
-                </div>
-                <div className="my-10">
-                    <h2 className="text-black flex justify-center py-5 ">Certificate</h2>
-                    <div className="overflow-auto flex justify-evenly gap-5">
-                        {Array(3).fill(
-                            <ImageUploader onUrlImages={setUrlImages} defaultImage={CertDefaultImage} />
-                        )}
-                    </div>
+                    <ImageUploader onUrlImages={setUrlAvatar} defaultImage={UserDefaultImage} />
                 </div>
                 <div className="w-1/2 flex justify-evenly m-auto">
                     <button type="submit" className="rounded-lg px-12 py-4 bg-blue-400 hover:bg-blue-500 text-white">Save </button>
                     <button type="reset" className="rounded-lg px-12 py-4 bg-gray-400 hover:bg-gray-500 text-white">Cancel</button>
                 </div>
             </form>
+            <h2 className="text-black flex justify-center py-5 ">Certificate</h2>
+            <div className="overflow-auto flex justify-evenly gap-5">
+                {Array(3).fill(
+                    <ImageUploader onUrlImages={setUrlsCert} defaultImage={DefaultCertImg} />
+                )}
+            </div>
         </section>
     );
 };

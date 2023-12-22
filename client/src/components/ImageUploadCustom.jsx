@@ -1,16 +1,37 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 
-const ImageUploader = ({ defaultImage, onUrlImages }) => {
+const Image = ({ imageSource }) => (
+    <div className="w-max relative">
+        <img className="cursor-pointer border border-gray-400 w-56 h-56 before:bg-gray-100 before:absolute before:inset-0 before:border-dashed before:duration-300 hover:before:scale-105 active:before:scale-95"
+            alt="file upload icon"
+            src={imageSource}
+        />
+    </div>
+);
+
+const Input = ({ inputRef, onImageChange }) => (
+    <input
+        ref={inputRef}
+        className="bg-red-100 absolute inset-0 opacity-0 cursor-pointer"
+        type="file"
+        onChange={onImageChange}
+    />
+);
+
+const ImageUploader = ({ onUrlImages, defaultImage }) => {
     const inputRef = useRef();
     const [selectedImages, setSelectedImages] = useState([]);
-
-    useEffect(() => {
-        onUrlImages(selectedImages);
+    // Replace old images && set asign in onUrlImages function
+    const imageSource = useMemo(() => {
+        const imageSource = selectedImages.length > 0 ? URL.createObjectURL(selectedImages[0]) : defaultImage;
+        onUrlImages(imageSource);
+        return imageSource;
     }, [selectedImages, onUrlImages]);
 
     function handleImageChange(e) {
         if (e.target.files) {
             setSelectedImages([...e.target.files]);
+            // setSelectedImages(prevImages => [...prevImages, ...e.target.files]);
         }
     }
 
@@ -21,24 +42,11 @@ const ImageUploader = ({ defaultImage, onUrlImages }) => {
         }
     }
 
-    const imageSource = selectedImages.length > 0 ? URL.createObjectURL(selectedImages[0]) : defaultImage;
-
     return (
         <div className='flex flex-col'>
             <div className="relative ">
-                <div className="w-max relative">
-                    <img className="cursor-pointer border border-gray-400 w-56 h-56 before:bg-gray-100 before:absolute before:inset-0 before:border-dashed before:duration-300 hover:before:scale-105 active:before:scale-95"
-                        alt="file upload icon"
-                        src={imageSource}
-                    />
-                </div>
-                <input
-                    ref={inputRef}
-                    className="bg-red-100 absolute inset-0 opacity-0 cursor-pointer"
-                    type="file"
-                    multiple
-                    onChange={handleImageChange}
-                />
+                <Image imageSource={imageSource} />
+                <Input inputRef={inputRef} onImageChange={handleImageChange} />
             </div>
             {selectedImages.length > 0 &&
                 <button className="bg-red-500 py-1 my-2 rounded-lg" onClick={handleRemoveImage}>Remove</button>
