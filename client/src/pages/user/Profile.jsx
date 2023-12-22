@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import HeaderImage from "../../images/header_bg_1.jpg";
-import UserProfileImage from "../../images/user_profile.png";
+import ImageUploader from "../../components/ImageUploadCustom";
+import CertDefaultImage from "../../images/cert-frame.png";
+import UserDefaultImage from "../../images/user_profile.png";
+
 
 const FormField = ({ id, label, placeholder, value, onChange }) => (
     <li className="py-3 flex justify-between items-center gap-10">
@@ -10,6 +12,8 @@ const FormField = ({ id, label, placeholder, value, onChange }) => (
 );
 
 const Profile = () => {
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
+    const [urlImages, setUrlImages] = useState([]);
     const [formState, setFormState] = useState({
         fullname: '',
         gender: '',
@@ -27,39 +31,37 @@ const Profile = () => {
     }
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(formState);
+        console.log(formState, urlImages, selectedPhoto);
+        console.log("selectedPhoto", selectedPhoto)
     }
     return (
         <section className="p-10 rounded-2xl bg-white container text-black">
             <form onSubmit={(e) => handleSubmit(e)}>
                 <h1 className="text-2xl py-10 text-black m-auto">MY PROFILE</h1>
                 <div className="flex justify-around">
-                    <ul>
+                    <div>
                         <FormField id="fullname" label="Fullname:" placeholder="Fullname" value={formState.fullname} onChange={handleChange} />
                         <FormField id="gender" label="Gender:" placeholder="Gender" value={formState.gender} onChange={handleChange} />
                         <FormField id="age" label="Age" placeholder="Age" value={formState.age} onChange={handleChange} />
                         <FormField id="experience" label="Year of Experiences" placeholder="Year of Experiences" value={formState.experience} onChange={handleChange} />
                         <FormField id="participant" label="Number of participants" placeholder="Number of participants" value={formState.participant} onChange={handleChange} />
                         <FormField id="price" label="Price" placeholder="Price" value={formState.price} onChange={handleChange} />
-                    </ul>
-                    <div className="relative ">
-                        <label title="Click to upload" htmlFor="triggerInput">
-                            <div className="w-max relative ">
-                                <img className="cursor-pointer rounded-full w-56 h-56 before:bg-gray-100  before:absolute before:inset-0  before:border-dashed  before:duration-300 hover:before:scale-105  active:before:scale-95"
-                                    src={UserProfileImage}
-                                    alt="file upload icon" />
-                            </div>
-                        </label>
-                        <input className="hidden" type="file" name="triggerInput" id="triggerInput" />
+                    </div>
+                    <ImageUploader onUrlImages={setSelectedPhoto} defaultImage={UserDefaultImage} />
+                </div>
+                <div className="my-10">
+                    <h2 className="text-black flex justify-center py-5 ">Certificate</h2>
+                    <div className="overflow-auto flex justify-evenly gap-5">
+                        {Array(3).fill(
+                            <ImageUploader onUrlImages={setUrlImages} defaultImage={CertDefaultImage} />
+                        )}
                     </div>
                 </div>
-
                 <div className="w-1/2 flex justify-evenly m-auto">
                     <button type="submit" className="rounded-lg px-12 py-4 bg-blue-400 hover:bg-blue-500 text-white">Save </button>
                     <button type="reset" className="rounded-lg px-12 py-4 bg-gray-400 hover:bg-gray-500 text-white">Cancel</button>
                 </div>
             </form>
-
         </section>
     );
 };
