@@ -24,13 +24,13 @@ const ImageUploader = ({ onUrlImages, defaultImage }) => {
     // Replace old images && set asign in onUrlImages function
     const imageSource = useMemo(() => {
         const imageSource = selectedImages.length > 0 ? URL.createObjectURL(selectedImages[0]) : defaultImage;
-        onUrlImages(imageSource);
         return imageSource;
     }, [selectedImages, onUrlImages]);
 
     function handleImageChange(e) {
         if (e.target.files) {
             setSelectedImages([...e.target.files]);
+            onUrlImages(e.target.files[0])
             // setSelectedImages(prevImages => [...prevImages, ...e.target.files]);
         }
     }

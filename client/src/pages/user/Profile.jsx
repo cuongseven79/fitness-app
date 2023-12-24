@@ -32,9 +32,27 @@ const Profile = () => {
     }
     function handleSubmit(e) {
         e.preventDefault();
+        const formData = new FormData();
+        if (urlAvatar) {
+            formData.append('image', urlAvatar);
+        }
+        
+        try {
+            axios.post("http://localhost:3001/profile", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(res => {
+                console.log(res.data)
+            }).catch(error => {
+                console.log(error)
+            })
+        } catch (error) {
+            console.log("ERROR: " + error)
+        }
     }
-    console.log("urlAvatar", urlAvatar)
-    console.log("urlcert", urlCerts)
+    // console.log("urlAvatar", urlAvatar)
+    // console.log("urlcert", urlCerts)
 
 
     return (
