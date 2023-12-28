@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { deleteImage, postProfile } from '../api/profileService';
 
 const Image = ({ imageSource }) => (
     <div className="w-max relative">
@@ -21,22 +22,27 @@ const Input = ({ inputRef, onImageChange }) => (
 const ImageUploader = ({ onUrlImages, defaultImage }) => {
     const inputRef = useRef();
     const [selectedImages, setSelectedImages] = useState([]);
-    // Replace old images && set asign in onUrlImages function
+
     const imageSource = useMemo(() => {
-        const imageSource = selectedImages.length > 0 ? URL.createObjectURL(selectedImages[0]) : defaultImage;
-        return imageSource;
+        return selectedImages.length > 0 ? URL.createObjectURL(selectedImages[0]) : defaultImage;
     }, [selectedImages, onUrlImages]);
 
-    function handleImageChange(e) {
+    const handleImageChange = async (e) => {
         if (e.target.files) {
             setSelectedImages([...e.target.files]);
-            onUrlImages(e.target.files[0])
-            // setSelectedImages(prevImages => [...prevImages, ...e.target.files]);
+            const file = e.target.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+            postProfile(formData);
         }
     }
 
-    function handleRemoveImage() {
-        setSelectedImages([]);
+    const handleRemoveImage = () => {
+        if (selectedImages[0]) {
+            const file = selectedImages[0];
+            deleteImage(file.name);
+            setSelectedImages([]);
+        }
         if (inputRef.current) {
             inputRef.current.value = "";
         }

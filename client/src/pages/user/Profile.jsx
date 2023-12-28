@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageUploader from "../../components/ImageUploadCustom";
 import DefaultCertImg from "../../images/cert-frame.png";
 import UserDefaultImage from "../../images/user_profile.png";
-import axios from "axios";
+import { getProfile } from "../../api/profileService";
+
 
 
 const FormField = ({ id, label, placeholder, value, onChange }) => (
@@ -13,8 +14,7 @@ const FormField = ({ id, label, placeholder, value, onChange }) => (
 );
 
 const Profile = () => {
-    const [urlAvatar, setUrlAvatar] = useState(null);
-    const [urlCerts, setUrlsCert] = useState(null);
+    const [profile, setProfile] = useState(null);
     const [formState, setFormState] = useState({
         fullname: '',
         gender: '',
@@ -30,30 +30,25 @@ const Profile = () => {
             [e.target.id]: e.target.value
         });
     }
-    function handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        if (urlAvatar) {
-            formData.append('image', urlAvatar);
-        }
-        
+        console.log(formState);
+    }
+
+    const fetchProfile = async () => {
         try {
-            axios.post("http://localhost:3001/profile", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then(res => {
-                console.log(res.data)
-            }).catch(error => {
-                console.log(error)
-            })
+            const data = await getProfile();
+            setProfile(data);
         } catch (error) {
-            console.log("ERROR: " + error)
+            console.log(error);
         }
     }
-    // console.log("urlAvatar", urlAvatar)
-    // console.log("urlcert", urlCerts)
 
+    useEffect(() => {
+        fetchProfile();
+    }, []);
+
+    console.log("profile", profile)
 
     return (
         <section className="p-10 rounded-2xl bg-white container text-black">
@@ -68,7 +63,7 @@ const Profile = () => {
                         <FormField id="participant" label="Number of participants" placeholder="Number of participants" value={formState.participant} onChange={handleChange} />
                         <FormField id="price" label="Price" placeholder="Price" value={formState.price} onChange={handleChange} />
                     </div>
-                    <ImageUploader onUrlImages={setUrlAvatar} defaultImage={UserDefaultImage} />
+                    <ImageUploader defaultImage={UserDefaultImage} />
                 </div>
                 <div className="w-1/2 flex justify-evenly m-auto">
                     <button type="submit" className="rounded-lg px-12 py-4 bg-blue-400 hover:bg-blue-500 text-white">Save </button>
@@ -78,10 +73,11 @@ const Profile = () => {
             <h2 className="text-black flex justify-center py-5 ">Certificate</h2>
             <div className="overflow-auto flex justify-evenly gap-5">
                 {Array(3).fill(
-                    <ImageUploader onUrlImages={setUrlsCert} defaultImage={DefaultCertImg} />
+                    <ImageUploader defaultImage={DefaultCertImg} />
                 )}
             </div>
         </section>
+
     );
 };
 
