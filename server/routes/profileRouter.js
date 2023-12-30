@@ -7,6 +7,7 @@ const bucket = admin.storage().bucket();
 const tempStorage = multer.memoryStorage();
 const upload = multer({ storage: tempStorage });
 
+/* Delete method */
 const handleDelete = async (req, res) => {
   if (!req.body.name) { 
     return res.status(400).send('No image name provided.');
@@ -17,6 +18,7 @@ const handleDelete = async (req, res) => {
     .catch((error) => console.log("Error deleting file:", error));
 };
 
+/* Add method */
 const handleUpload = async (req, res) => {
   if (!req.file) { 
     return res.status(400).send('No file uploaded.');
@@ -33,6 +35,7 @@ const handleUpload = async (req, res) => {
   blobStream.end(req.file.buffer);
 };
 
+/* Get method */
 const handleGetImages = async (req, res) => {
   const [files] = await bucket.getFiles();
   const fileUrls = files.map(file => `https://storage.googleapis.com/${bucket.name}/${file.name}`);

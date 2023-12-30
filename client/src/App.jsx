@@ -11,6 +11,8 @@ import Trainers from "./pages/trainers/Trainers";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Profile from "./pages/user/Profile";
+import Login from "./pages/login/Login";
+import SignUp from "./pages/signup/SignUp";
 
 const App = () => {
 	return (
@@ -24,6 +26,8 @@ const App = () => {
 				<Route path="plans" element={<Plans />} />
 				<Route path="trainers" element={<Trainers />} />
 				<Route path="profile" element={<Profile />} />
+				<Route path="login" element={<Login />} />
+				<Route path="signup" element={<SignUp />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 			<Footer />
