@@ -9,7 +9,7 @@ import { AiFillCaretRight } from "react-icons/ai";
 const Program = () => {
 	return (
 		<section className="programs">
-			<div className="container programs container">
+			<div className="container programs ">
 				<SectionHead icon={<FaCrown />} title="Programs" />
 
 				<div className="program__wrapper">

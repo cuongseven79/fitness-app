@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../components/Header";
 import HeaderImage from "../../images/header_bg_5.jpg";
 import { BsInstagram } from "react-icons/bs";
@@ -10,6 +10,9 @@ import Trainer from "../../components/Trainer";
 import "./trainers.css";
 
 const Trainers = () => {
+	useEffect(() => {
+		document.title = `Trainers`;
+	}, []);
 	return (
 		<>
 			<Header image={HeaderImage} title="Our Trainers">

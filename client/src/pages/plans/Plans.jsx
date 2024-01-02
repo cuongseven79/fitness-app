@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./plans.css";
 import { plans } from "../../data";
 import Header from "../../components/Header";
@@ -6,6 +6,9 @@ import HeaderImage from "../../images/header_bg_4.jpg";
 import Card from "../../components/Card";
 
 const Plans = () => {
+	useEffect(() => {
+		document.title = `Plants`;
+	}, []);
 	return (
 		<>
 			<Header title="Membership Plans" image={HeaderImage}>

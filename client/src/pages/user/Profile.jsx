@@ -23,6 +23,9 @@ const Profile = () => {
         participant: '',
         price: ''
     });
+    useEffect(() => {
+        document.title = `Profile`;
+    }, []);
 
     function handleChange(e) {
         setFormState({

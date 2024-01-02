@@ -1,6 +1,6 @@
 // rafce -> shortcut to create component and export
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import Contact from "./pages/contact/Contact";
@@ -13,8 +13,16 @@ import Footer from "./components/Footer";
 import Profile from "./pages/user/Profile";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
+import { useAuth } from "./context/AuthContext";
 
 const App = () => {
+
+	const user = JSON.parse(sessionStorage.getItem('user'));
+	const { setCurrentUser } = useAuth()
+	useEffect(() => {
+		setCurrentUser(user)
+	}, []);
+	console.log(user)
 	return (
 		<BrowserRouter>
 			<Navbar />

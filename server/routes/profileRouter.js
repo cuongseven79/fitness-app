@@ -42,8 +42,8 @@ const handleGetImages = async (req, res) => {
   res.status(200).json(fileUrls);
 };
 
-router.post('/delete', handleDelete);
-router.post('/', upload.single('image'), handleUpload);
 router.get('/', handleGetImages);
+router.post('/', upload.single('image'), handleUpload);
+router.delete('/delete', handleDelete);
 
 module.exports = router;

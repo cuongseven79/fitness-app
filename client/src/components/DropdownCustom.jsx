@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 import { Link } from 'react-router-dom';
+import avatarDefault from '../images/avatar.svg'
 
 const DropdownCustom = ({
     title,
     className = "",
     items = [],
     onSelected = (item) => { },
-
+    children
 }) => {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -36,9 +37,7 @@ const DropdownCustom = ({
                         ))}
                     </ul>
                     <div className="py-2">
-                        <Link to="about">
-                            <span className="text-center block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</span>
-                        </Link>
+                        {children}
                     </div>
                 </div>
             )}

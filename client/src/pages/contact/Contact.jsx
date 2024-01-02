@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./contact.css";
 import Header from "../../components/Header";
 import HeaderImage from "../../images/header_bg_2.jpg";
@@ -7,6 +7,9 @@ import { BsMessenger } from "react-icons/bs";
 import { IoLogoWhatsapp } from "react-icons/io";
 
 const Contact = () => {
+	useEffect(() => {
+		document.title = `Contact`;
+	}, []);
 	return (
 		<>
 			<Header title="Gt In Touch" image={HeaderImage}>

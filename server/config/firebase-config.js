@@ -21,7 +21,7 @@ var serviceAccount = require("./serviceAccountKey.json");
 
 const firebaseAdmin = initializeApp();
 const database = firebaseAdmin.firestore();
-const User = database.collection("User");
+const User = database.collection("Users");
 const Images = database.collection("Images");
 
 module.exports = {User, Images};

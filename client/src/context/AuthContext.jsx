@@ -1,5 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { addUser, getUsers } from "../api/authService";
+import { createContext, useContext, useState } from "react";
+import { addUser, getAllUsers, verifyLogin } from "../api/authService";
+import { auth, database, googleProvider } from "../config/firebase-config";
+import { onAuthStateChanged, sendPasswordResetEmail, signInWithPopup } from "firebase/auth";
+import { getDoc, setDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
+
+
 
 const AuthContext = createContext();
 export function useAuth() {
@@ -7,22 +12,94 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-	const [currentUser, setCurrentUser] = useState();
+	const [currentUser, setCurrentUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
-	async function login(email, password) { }
 
-	async function signInGoogle() { }
+	// async function signInWithFacebook() {
+	// 	try {
+	// 		const res = await signInWithPopup(auth, facebookProvider);
+	// 		const { displayName, email, phoneNumber, photoURL, uid } = res.user;
 
-	async function signUp({ fullName, phoneNumber, email, password }) {
+	// 		onAuthStateChanged(auth, async (user) => {
+	// 			if (user) {
+	// 				const Users = doc(database, "Users", uid);
+	// 				if (!(await getDoc(Users)).exists()) {
+	// 					await setDoc(Users, {
+	// 						fullname: displayName,
+	// 						email: email,
+	// 						phoneNumber: phoneNumber,
+	// 						photoURL: photoURL,
+	// 					});
+	// 				}
+	// 			} else {
+	// 				// User is signed out
+	// 				console.log('User is not signed in');
+	// 			}
+	// 		});
+	// 	} catch (error) {
+	// 		console.error('An error occurred during sign in with Facebook:', error.message, 'Error code:', error.code);
+	// 	}
+	// }
+	async function signInWithGoogle() {
 		try {
+			const res = await signInWithPopup(auth, googleProvider);
+			const { displayName, email, phoneNumber, photoURL, uid } = res.user;
+			const userData = {};
+			onAuthStateChanged(auth, async (user) => {
+				if (user) {
+					const Users = doc(database, "Users", uid);
+					if (!(await getDoc(Users)).exists()) {
+						await setDoc(Users, userData);
+					}
+					setCurrentUser({ fullName: displayName, email: email, phoneNumber: phoneNumber, photoURL: photoURL, id: uid });
+					sessionStorage.setItem('user', JSON.stringify({ fullName: displayName, email: email, phoneNumber: phoneNumber, photoURL: photoURL, id: uid }))
+					console.log('Login successfully');
+				} else {
+					console.log('User is not signed in');
+				}
+			});
+			return res.user;
+		} catch (error) {
+			console.error('An error occurred during sign in with Google:', error);
+		}
+	}
+	async function login(formData) {   //{email, password }
+		setLoading(true);
+		try {
+			const { statusCode, userData } = await verifyLogin(formData);
+			if (statusCode === 200) {
+				const { password, ...user } = userData;
+				setCurrentUser(user);
+				sessionStorage.setItem('user', JSON.stringify(user));
+				return { message: "Register successfully", statusCode: statusCode };
+			}
+		} catch (error) {
+			if (error.response && error.response.status) {
+				const statusCode = error.response.status;
+				switch (statusCode) {
+					case 401:
+						return { message: "Your email (or) password wrong!", statusCode: statusCode }; //password wrong!
+					case 404:
+						return { message: "Your email (or) password wrong!", statusCode: statusCode }; // Email wrong!
+					default:
+						return { message: "Login fail!", statusCode: error.status };
+				}
+			} else {
+				return { message: "An error occurred: " + error.message };
+			}
+		}
+	}
+	async function signUp(formData) {
+		try {
+			const { fullName, phoneNumber, email, password } = formData;
 			const { statusCode } = await addUser({ fullName, phoneNumber, email, password });
+
 			switch (statusCode) {
 				case 201:
-					window.location.href = "/login";
-					return { message: "Register Successfully!" };
+					return { message: "Register successfully", statusCode: statusCode };
 				default:
-					return { message: "Unexpected status code: " + statusCode };
+					return { message: "Unexpected status code", statusCode: statusCode };
 			}
 		} catch (error) {
 			if (error.response && error.response.status) {
@@ -39,29 +116,21 @@ export function AuthProvider({ children }) {
 		}
 	}
 
-	async function logOut() { }
-
 	async function resetPassword(email) {
-		// return sendPasswordResetEmail(auth, email, {
-		// 	url: window.location.origin + `/login`,
-		// }).catch((error) => {
-		// 	// Handle Errors
-		// 	const errorMessage = error.message;
-		// 	console.error(error);
+		return sendPasswordResetEmail(auth, email, {
+			url: window.location.origin + `/login`,
+		}).catch((error) => {
+			// Handle Errors
+			const errorMessage = error.message;
+			console.error(error);
 
-		// 	alert(errorMessage);
-		// });
+			alert(errorMessage);
+		});
 	}
-
-	// }
-	async function deleteCurrentUser() { }
-
-	async function updateUserInfo(name, email, photoURL, bio, website) { }
-
 	async function updateUserPassword(password) { }
 
-	async function getUser() {
-		return getUsers();
+	async function getUsers() {
+		return getAllUsers();
 	}
 
 	// useEffect(() => {
@@ -73,18 +142,18 @@ export function AuthProvider({ children }) {
 	// 	return unsubscribe;
 	// }, []);
 
-	const value = {
-		// currentUser,
-		// signInGoogle,
-		// deleteCurrentUser,
+	const values = {
+		currentUser,
+		setCurrentUser,
+		login,
+		signInWithGoogle,
+		signUp,
+		getUsers,
+		// signInWithFacebook,
 		// updateUserInfo,
 		// updateUserPassword,
-		getUser,
-		// login,
-		// logOut,
-		// resetPassword,
-		signUp,
+		resetPassword,
 	};
 
-	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 }

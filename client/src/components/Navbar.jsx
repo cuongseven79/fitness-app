@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../images/logo.png";
 import { links } from "../data";
@@ -6,6 +6,7 @@ import { FaBars } from 'react-icons/fa';
 import { MdOutlineClose } from "react-icons/md";
 import "./navbar.css";
 import DropdownCustom from "./DropdownCustom";
+import { useAuth } from "../context/AuthContext";
 
 const items = [
 	{
@@ -20,16 +21,28 @@ const items = [
 	},
 ];
 
+const NavItem = ({ name, path, handleNavToggle }) => (
+	<li>
+		<NavLink
+			to={path}
+			className={({ isActive }) => (isActive ? "active-nav" : "")}
+			onClick={handleNavToggle}
+		>
+			{name}
+		</NavLink>
+	</li>
+);
+
 const Navbar = () => {
+
 	const [isNavShowing, setIsNavShowing] = useState(false);
+	const { currentUser } = useAuth()
 
-	function handleNavToggle() {
-		return setIsNavShowing((prevVAlue) => {
-			return !prevVAlue;
-		});
-	};
-	function handleSelectedItem(item) {
-
+	// console.log(user)
+	const handleNavToggle = useCallback(() => {
+		setIsNavShowing(prevValue => !prevValue);
+	}, []);
+	function handleSelected(item) {
 		console.log(item)
 	}
 	return (
@@ -39,29 +52,28 @@ const Navbar = () => {
 					<img src={Logo} alt="Nav-logo" />
 				</Link>
 				<ul className={`nav__links ${isNavShowing ? "show__nav" : "hide__nav"}`}>
-					{/* Destructure the links array of object from the links to get each item */}
-					{links.map(({ name, path }, index) => {
-						return (
-							<li key={index}>
-								<NavLink
-									to={path}
-									className={({ isActive }) => (isActive ? "active-nav" : "")}
-									onClick={handleNavToggle}
-								>
-									{name}
-								</NavLink>
-							</li>
-						);
-					})}
+					{links.map(({ name, path, id }) => (
+						<NavItem key={id} name={name} path={path} handleNavToggle={handleNavToggle} />
+					))}
 				</ul>
 				<div>
-					<DropdownCustom title={"Teo Nguyen"} items={items} onSelected={handleSelectedItem} />
+					{currentUser
+						? <DropdownCustom title={currentUser.fullName} items={items} onSelected={handleSelected}>
+							<Link onClick={() => sessionStorage.clear()} reloadDocument to={'/'}
+								className=" block text-center py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Logout</Link>
+						</DropdownCustom>
+						:
+						<div className="w-full text-center">
+							<Link to={'/login'} className="w-20 bg-slate-200 rounded-lg p-2 mr-4 text-black">Login</Link>
+							<Link to={'/signup'} className="w-20 bg-slate-200 rounded-lg p-2 mr-4 text-black">Sign Up</Link>
+						</div>
+					}
 				</div>
 				<button onClick={handleNavToggle} className="nav__toggle-btn">
 					{isNavShowing ? <MdOutlineClose /> : <FaBars />}
 				</button>
 			</div>
-		</nav>
+		</nav >
 	);
 };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import GoogleButton from "react-google-button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function InputField({ id, type, placeholder, value, onChange }) {
     return (
@@ -23,42 +24,55 @@ function InputField({ id, type, placeholder, value, onChange }) {
 }
 
 function Login() {
-    const [formState, setFormState] = useState({
+    const [messageRes, setMessageRes] = useState('')
+    const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
-    
-    // useEffect(() => {
-    //     document.title = `Log In | Sign Up`;
-    // }, []);
 
+    useEffect(() => {
+        document.title = `Log In`;
+    }, []);
+
+    const { signInWithGoogle, login, resetPassword } = useAuth();
+    const navigate = useNavigate();
     function handleFormChange(e) {
-        setFormState({
-            ...formState,
+        setFormData({
+            ...formData,
             [e.target.id]: e.target.value
         });
     }
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        // Add login logic here
-        console.log(formState)
+        const { message, statusCode } = await login(formData);
+        if (statusCode === 200) {
+            navigate('/')
+        } else {
+            setMessageRes(message)
+        }
+        // const res = await resetPassword("trangiacuong216@gmail.com")
+        // console.log("res ==> ", res)
     }
 
-    function handleGoogle(e) {
+    async function handleLoginGoogle(e) {
         e.preventDefault();
-        // Add Google sign in logic here
+        const res = await signInWithGoogle();
+        if (res) {
+            navigate("/");
+        }
     }
+
 
     return (
         <div className="mx-auto py-10 rounded-3xl bg-white mt-40 w-1/3">
             <form onSubmit={handleSubmit} className="mx-10 flex flex-col justify-center items-center">
-                <InputField id="email" type="email" placeholder="E-Mail Address" value={formState.email} onChange={handleFormChange} />
-                <InputField id="password" type="password" placeholder="Password" value={formState.password} onChange={handleFormChange} />
-
+                <InputField id="email" type="email" placeholder="E-Mail Address" value={formData.email} onChange={handleFormChange} />
+                <InputField id="password" type="password" placeholder="Password" value={formData.password} onChange={handleFormChange} />
+                <span className="text-red-500">{messageRes}</span>
                 <div className="mb-10">
                     <button className="bg-blue-600 hover:bg-blue-500 text-white rounded-full h-12 w-full text-lg font-medium">Sign In</button>
                     <div className="mt-4">
-                        <GoogleButton type="light" label="Login with Google" onClick={handleGoogle} />
+                        <GoogleButton className="googleBtn" type="light" label="Login with Google" onClick={handleLoginGoogle} />
                     </div>
                     <label className="text-gray-500 text-sm mt-4 flex justify-center">
                         <Link to="/forgot-password" className=" border-b border-blue-600 pb-1">

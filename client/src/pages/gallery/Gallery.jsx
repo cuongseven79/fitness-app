@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./gallery.css";
 import HeaderImage from "../../images/header_bg_3.jpg";
 import Header from "../../components/Header";
 
 function Gallery() {
+	useEffect(() => {
+		document.title = `Gallery`;
+	}, []);
 	const galleryLength = 15;
 	const images = [];
 	for (let i = 1; i <= galleryLength; i++) {

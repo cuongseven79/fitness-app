@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GoogleButton from "react-google-button";
-import { Link } from "react-router-dom";
+import './signup.css'
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { validEmail, validPassword, validPhoneNumber } from "../../utils/validateForm";
 
 function InputField({ id, type, placeholder, value, onChange }) {
 	return (
@@ -24,18 +26,19 @@ function InputField({ id, type, placeholder, value, onChange }) {
 }
 
 function SignUp() {
-	const [errorMessage, setErrorMessage] = useState("");
+	const [message, setMessageRes] = useState("");
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		fullName: "",
 		phoneNumber: "",
 		email: "",
 		password: ""
 	})
-	const { signUp, getUser } = useAuth();
+	const { signUp, signInWithGoogle } = useAuth();
 
-	// useEffect(() => {
-	// 	document.title = `Log In | Sign Up`;
-	// }, []);
+	useEffect(() => {
+		document.title = `Sign Up`;
+	}, []);
 
 	function handleFormChange(e) {
 		setFormData({
@@ -46,20 +49,43 @@ function SignUp() {
 
 	async function handleSubmit(e) {
 		e.preventDefault();
-		const res = await signUp(formData);
-		setErrorMessage(res.message);
-		setFormData(
-			{
-				fullName: "",
-				phoneNumber: "",
-				email: "",
-				password: ""
+		try {
+			validPhoneNumber(formData.phoneNumber)
+			validEmail(formData.email)
+			validPassword(formData.password)
+			const { message, statusCode } = await signUp(formData);
+			if (statusCode === 201) {
+				navigate("/login");
+			} else {
+				setMessageRes(message);
 			}
-		);
+			setFormData(
+				{
+					fullName: "",
+					phoneNumber: "",
+					email: "",
+					password: ""
+				}
+			);
+		} catch (error) {
+			setMessageRes(error.message);
+		}
+
+
 	}
-	function handleGoogle(e) {
+	async function handleLoginGoogle(e) {
 		e.preventDefault();
+		const res = await signInWithGoogle();
+		if (res) {
+			navigate("/");
+		}
+		console.log("res==>", res)
 	}
+	// async function handleLoginFacebook(e) {
+	// 	e.preventDefault();
+	// 	await signInWithFacebook().catch((err) => console.log(JSON.stringify(err)));
+	// }
+
 	console.log(formData)
 	return (
 		<div className="mx-auto py-10 rounded-3xl bg-white mt-36 w-1/3">
@@ -69,14 +95,17 @@ function SignUp() {
 				<InputField id="email" type="email" placeholder="E-Mail Address" value={formData.email} onChange={handleFormChange} />
 				<InputField id="password" type="password" placeholder="Password" value={formData.password} onChange={handleFormChange} />
 
-				<span className="text-red-500">{errorMessage}</span>
+				<span className="text-red-500">{message}</span>
 				<div className="mb-10">
 					<button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white rounded-full h-12 w-full text-lg font-medium">
 						Sign Up
 					</button>
-					<div className="mt-4">
-						<GoogleButton type="light" label="Login with Google" onClick={handleGoogle} />
+					<div className="mt-4 rounded-lg">
+						<GoogleButton className="googleBtn" type="light" label="Login with Google" onClick={handleLoginGoogle} />
 					</div>
+					{/* <div className="mt-4">
+						<ReactFacebookLoginInfo typeButton="button" onClick={handleLoginFacebook} />
+					</div> */}
 				</div>
 
 				<div className="font-medium my-5 text-lg ">Already have an account?</div>

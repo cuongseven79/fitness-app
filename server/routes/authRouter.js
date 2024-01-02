@@ -44,9 +44,36 @@ const handleDeleteUser = async (req, res) => {
     return res.status(200).json({ message: "User deleted successfully"});
 }
 
+/* ----- Login ---  */
+const handleVerifyLogin = async (req, res) => {
+    const { email, password } = req.body;
+    const userRef = (await User.where('email', '==', email).get());
+    const userInfor = userRef.docs[0];
+    if (!userInfor) {
+        res.status(404).send({ message: 'User not exists', statusCode: 404});
+        return;
+    }   
+    const user = userInfor.data();
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+        res.status(401).send('Incorrect password');
+        return;
+    }
+
+    const id = userRef.docs[0].id;
+    const userData = {...user, id: id}
+    console.log(userData)
+    return res.status(200).send({ message: 'Login successful', statusCode: 200, userData: userData });
+}
+
+/* Routers SignUp */
 router.get('/', handleGetAllUsers);
 router.post('/create', handleCreateUser);
 router.put('/update', handleUpdateUser);
 router.delete('/delete', handleDeleteUser);
+
+/* Routers Login */
+router.post('/', handleVerifyLogin);
 
 module.exports = router;

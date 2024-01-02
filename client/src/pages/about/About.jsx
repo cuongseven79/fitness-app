@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./about.css";
 import Header from "../../components/Header";
 import HeaderImage from "../../images/header_bg_1.jpg";
@@ -7,6 +7,9 @@ import VisionImage from "../../images/about2.jpg";
 import MissionImage from "../../images/about3.jpg";
 
 const About = () => {
+	useEffect(() => {
+		document.title = `About`;
+	}, []);
 	return (
 		<>
 			<Header title="About us" image={HeaderImage}>
