@@ -45,15 +45,18 @@ export function AuthProvider({ children }) {
 		try {
 			const res = await signInWithPopup(auth, googleProvider);
 			const { displayName, email, phoneNumber, photoURL, uid } = res.user;
-			const userData = {};
-			onAuthStateChanged(auth, async (user) => {
+			const userData = { displayName, email, phoneNumber, photoURL };
+			const userSessionData = { fullName: displayName, email, phoneNumber, photoURL, id: uid };
+
+			const Users = doc(database, "Users", uid);
+			if (!(await getDoc(Users)).exists()) {
+				await setDoc(Users, userData);
+			}
+			setCurrentUser(userSessionData);
+			sessionStorage.setItem('user', JSON.stringify(userSessionData));
+
+			onAuthStateChanged(auth, (user) => {
 				if (user) {
-					const Users = doc(database, "Users", uid);
-					if (!(await getDoc(Users)).exists()) {
-						await setDoc(Users, userData);
-					}
-					setCurrentUser({ fullName: displayName, email: email, phoneNumber: phoneNumber, photoURL: photoURL, id: uid });
-					sessionStorage.setItem('user', JSON.stringify({ fullName: displayName, email: email, phoneNumber: phoneNumber, photoURL: photoURL, id: uid }))
 					console.log('Login successfully');
 				} else {
 					console.log('User is not signed in');

@@ -9,13 +9,18 @@ const upload = multer({ storage: tempStorage });
 
 /* Delete method */
 const handleDelete = async (req, res) => {
-  if (!req.body.name) { 
+  const { fileName} = req.body;
+  if (!fileName) { 
     return res.status(400).send('No image name provided.');
   }
-  const imageRef = bucket.file(req.body.name);
-  imageRef.delete()
-    .then(() => console.log("File deleted successfully"))
-    .catch((error) => console.log("Error deleting file:", error));
+  const imageRef = bucket.file(fileName);
+  
+  try {
+    await imageRef.delete();
+  } catch (error) {
+    return res.status(400).send('Delete failed.');
+  }
+  return res.status(200).send('Image deleted successfull.');
 };
 
 /* Add method */

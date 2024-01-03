@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ImageUploader from "../../components/ImageUploadCustom";
 import DefaultCertImg from "../../images/cert-frame.png";
 import UserDefaultImage from "../../images/user_profile.png";
+import { useAuth } from "../../context/AuthContext";
 import { getProfile } from "../../api/profileService";
 
 
@@ -23,9 +24,14 @@ const Profile = () => {
         participant: '',
         price: ''
     });
-    useEffect(() => {
-        document.title = `Profile`;
-    }, []);
+
+    // const { currentUser } = useAuth()
+    // console.log("currentUser", currentUser)
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    // console.log("userData", user.id)
+
+
+
 
     function handleChange(e) {
         setFormState({
@@ -40,18 +46,22 @@ const Profile = () => {
 
     const fetchProfile = async () => {
         try {
-            const data = await getProfile();
-            setProfile(data);
+            const data = await getProfile(user.id);
+            // const users = await getProfile("CmTJmFti46b0MnWy5si21auL6gM2");
+            console.log(" Profilepage  =>>> ", data)
+            // setProfile(data);
+            
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
+        document.title = `Profile`;
         fetchProfile();
     }, []);
 
-    console.log("profile", profile)
+    // console.log("profile", profile)
 
     return (
         <section className="p-10 rounded-2xl bg-white container text-black">

@@ -1,4 +1,5 @@
-const firebaseAdmin = require('./config/firebase-config');
+// !NOT remove this line. call initial configuration
+const initialConf = require('./config/firebase-config');
 
 const app = require('./middleware/middleware');
 const PORT = process.env.PORT || 3001;

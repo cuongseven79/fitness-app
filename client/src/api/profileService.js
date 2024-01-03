@@ -5,8 +5,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const getProfile = async () => {
   const response = await axios.get(API_URL + "/profile");
   return response.data;
-}
-
+};
 export const postProfile = async (formData) => {
   const response = await axios.post(API_URL + "/profile", formData, {
     headers: {
@@ -16,6 +15,10 @@ export const postProfile = async (formData) => {
   return response.data;
 }
 export const deleteImage = async (imageName) => {
-  const response = await axios.post(API_URL + "/profile/delete", { name: imageName });
+  const response = await axios.delete(API_URL + "/profile/delete", {
+    data: {
+      fileName: imageName
+    }
+  });
   return response.data;
 };

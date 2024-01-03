@@ -33,14 +33,16 @@ const ImageUploader = ({ onUrlImages, defaultImage }) => {
             const file = e.target.files[0];
             const formData = new FormData();
             formData.append('image', file);
-            postProfile(formData);
+            const res = await postProfile(formData);
+            const { imageUrl } = res;
+            
         }
     }
 
-    const handleRemoveImage = () => {
+    const handleRemoveImage = async () => {
         if (selectedImages[0]) {
             const file = selectedImages[0];
-            deleteImage(file.name);
+            await deleteImage(file.name);
             setSelectedImages([]);
         }
         if (inputRef.current) {
