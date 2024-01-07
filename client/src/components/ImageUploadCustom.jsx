@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { deleteImage, postProfile } from '../api/profileService';
+import { useParams } from 'react-router-dom';
 
 const Image = ({ imageSource }) => (
     <div className="w-max relative">
@@ -19,13 +20,13 @@ const Input = ({ inputRef, onImageChange }) => (
     />
 );
 
-const ImageUploader = ({ onUrlImages, defaultImage }) => {
+const ImageUploader = ({ defaultImage }) => {
     const inputRef = useRef();
     const [selectedImages, setSelectedImages] = useState([]);
-
+    const { id } = useParams()
     const imageSource = useMemo(() => {
         return selectedImages.length > 0 ? URL.createObjectURL(selectedImages[0]) : defaultImage;
-    }, [selectedImages, onUrlImages]);
+    }, [selectedImages]);
 
     const handleImageChange = async (e) => {
         if (e.target.files) {
@@ -33,16 +34,16 @@ const ImageUploader = ({ onUrlImages, defaultImage }) => {
             const file = e.target.files[0];
             const formData = new FormData();
             formData.append('image', file);
+            formData.append('userId', id);
             const res = await postProfile(formData);
-            const { imageUrl } = res;
-            
+            console.log(res)
         }
     }
 
     const handleRemoveImage = async () => {
         if (selectedImages[0]) {
             const file = selectedImages[0];
-            await deleteImage(file.name);
+            await deleteImage(file.name, id);
             setSelectedImages([]);
         }
         if (inputRef.current) {

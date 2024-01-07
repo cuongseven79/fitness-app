@@ -29,7 +29,7 @@ function SignUp() {
 	const [message, setMessageRes] = useState("");
 	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
-		fullName: "",
+		displayName: "",
 		phoneNumber: "",
 		email: "",
 		password: ""
@@ -61,7 +61,7 @@ function SignUp() {
 			}
 			setFormData(
 				{
-					fullName: "",
+					displayName: "",
 					phoneNumber: "",
 					email: "",
 					password: ""
@@ -90,7 +90,7 @@ function SignUp() {
 	return (
 		<div className="mx-auto py-10 rounded-3xl bg-white mt-36 w-1/3">
 			<form onSubmit={handleSubmit} className="mx-10 flex flex-col justify-center items-center">
-				<InputField id="fullName" type="text" placeholder="Full Name" value={formData.fullName} onChange={handleFormChange} />
+				<InputField id="displayName" type="text" placeholder="Display Name" value={formData.displayName} onChange={handleFormChange} />
 				<InputField id="phoneNumber" type="text" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleFormChange} />
 				<InputField id="email" type="email" placeholder="E-Mail Address" value={formData.email} onChange={handleFormChange} />
 				<InputField id="password" type="password" placeholder="Password" value={formData.password} onChange={handleFormChange} />

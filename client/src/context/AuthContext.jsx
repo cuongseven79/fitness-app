@@ -45,15 +45,14 @@ export function AuthProvider({ children }) {
 		try {
 			const res = await signInWithPopup(auth, googleProvider);
 			const { displayName, email, phoneNumber, photoURL, uid } = res.user;
-			const userData = { displayName, email, phoneNumber, photoURL };
-			const userSessionData = { fullName: displayName, email, phoneNumber, photoURL, id: uid };
+			const userData = { displayName, email, phoneNumber, photoURL, role: 'customer' };
 
 			const Users = doc(database, "Users", uid);
 			if (!(await getDoc(Users)).exists()) {
 				await setDoc(Users, userData);
 			}
-			setCurrentUser(userSessionData);
-			sessionStorage.setItem('user', JSON.stringify(userSessionData));
+			setCurrentUser(userData);
+			sessionStorage.setItem('user', JSON.stringify({ userId: uid, displayName }));
 
 			onAuthStateChanged(auth, (user) => {
 				if (user) {
@@ -70,11 +69,11 @@ export function AuthProvider({ children }) {
 	async function login(formData) {   //{email, password }
 		setLoading(true);
 		try {
-			const { statusCode, userData } = await verifyLogin(formData);
+			const { message, statusCode, userData } = await verifyLogin(formData);
 			if (statusCode === 200) {
 				const { password, ...user } = userData;
 				setCurrentUser(user);
-				sessionStorage.setItem('user', JSON.stringify(user));
+				sessionStorage.setItem('user', JSON.stringify({ userId: user.userId, displayName: user.displayName }));
 				return { message: "Register successfully", statusCode: statusCode };
 			}
 		} catch (error) {
@@ -95,8 +94,8 @@ export function AuthProvider({ children }) {
 	}
 	async function signUp(formData) {
 		try {
-			const { fullName, phoneNumber, email, password } = formData;
-			const { statusCode } = await addUser({ fullName, phoneNumber, email, password });
+			const { displayName, phoneNumber, email, password } = formData;
+			const { statusCode } = await addUser({ displayName, phoneNumber, email, password });
 
 			switch (statusCode) {
 				case 201:

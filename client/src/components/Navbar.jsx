@@ -1,25 +1,14 @@
 import React, { useState, useCallback } from "react";
-import { Link, NavLink } from "react-router-dom";
-import Logo from "../images/logo.png";
+import { Link, NavLink, useParams } from "react-router-dom";
+import Logo from "../images/logo.jpg";
+// import Logo from "../images/logo.png";
 import { links } from "../data";
 import { FaBars } from 'react-icons/fa';
 import { MdOutlineClose } from "react-icons/md";
 import "./navbar.css";
 import DropdownCustom from "./DropdownCustom";
-import { useAuth } from "../context/AuthContext";
 
-const items = [
-	{
-		id: 1,
-		title: "My profile",
-		path: "/profile",
-	},
-	{
-		id: 2,
-		title: "Manage Customers",
-		path: "/manage-customers",
-	},
-];
+
 
 const NavItem = ({ name, path, handleNavToggle }) => (
 	<li>
@@ -34,11 +23,19 @@ const NavItem = ({ name, path, handleNavToggle }) => (
 );
 
 const Navbar = () => {
-
 	const [isNavShowing, setIsNavShowing] = useState(false);
-	const { currentUser } = useAuth()
+	const userSection = JSON.parse(sessionStorage.getItem('user'));
+	const items = [
+		{
+			title: "My profile",
+			path: `/profile/${userSection?.userId}`,
+		},
+		{
+			title: "Manage Customers",
+			path: "/manage-customers",
+		},
+	];
 
-	// console.log(user)
 	const handleNavToggle = useCallback(() => {
 		setIsNavShowing(prevValue => !prevValue);
 	}, []);
@@ -48,8 +45,8 @@ const Navbar = () => {
 	return (
 		<nav>
 			<div className="container nav__container">
-				<Link to="/" className="logo" onClick={handleNavToggle}>
-					<img src={Logo} alt="Nav-logo" />
+				<Link to="/" className="w-20 " onClick={handleNavToggle}>
+					<img src={Logo} alt="Nav-logo" className="rounded-md"/>
 				</Link>
 				<ul className={`nav__links ${isNavShowing ? "show__nav" : "hide__nav"}`}>
 					{links.map(({ name, path, id }) => (
@@ -57,8 +54,8 @@ const Navbar = () => {
 					))}
 				</ul>
 				<div>
-					{currentUser
-						? <DropdownCustom title={currentUser.fullName} items={items} onSelected={handleSelected}>
+					{userSection
+						? <DropdownCustom title={userSection.displayName} items={items} onSelected={handleSelected}>
 							<Link onClick={() => sessionStorage.clear()} reloadDocument to={'/'}
 								className=" block text-center py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Logout</Link>
 						</DropdownCustom>

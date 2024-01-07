@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import ImageUploader from "../../components/ImageUploadCustom";
 import DefaultCertImg from "../../images/cert-frame.png";
 import UserDefaultImage from "../../images/user_profile.png";
-import { useAuth } from "../../context/AuthContext";
 import { getProfile } from "../../api/profileService";
+import { useParams } from "react-router-dom";
 
 
 
@@ -17,7 +17,7 @@ const FormField = ({ id, label, placeholder, value, onChange }) => (
 const Profile = () => {
     const [profile, setProfile] = useState(null);
     const [formState, setFormState] = useState({
-        fullname: '',
+        displayName: '',
         gender: '',
         age: '',
         experience: '',
@@ -25,14 +25,7 @@ const Profile = () => {
         price: ''
     });
 
-    // const { currentUser } = useAuth()
-    // console.log("currentUser", currentUser)
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    // console.log("userData", user.id)
-
-
-
-
+    const { id } = useParams() // {id} get from Router path <App/> in App.js
     function handleChange(e) {
         setFormState({
             ...formState,
@@ -46,11 +39,10 @@ const Profile = () => {
 
     const fetchProfile = async () => {
         try {
-            const data = await getProfile(user.id);
-            // const users = await getProfile("CmTJmFti46b0MnWy5si21auL6gM2");
-            console.log(" Profilepage  =>>> ", data)
-            // setProfile(data);
-            
+            const { statusCode, user } = await getProfile(id);
+            if (user && statusCode === 200) {
+                setProfile(user);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -60,23 +52,24 @@ const Profile = () => {
         document.title = `Profile`;
         fetchProfile();
     }, []);
-
-    // console.log("profile", profile)
-
+    console.log("photoURL ==>", profile?.photoURL)
+    if (!profile) {
+        return <h1>Loading...</h1>
+    }
     return (
         <section className="p-10 rounded-2xl bg-white container text-black">
             <form onSubmit={(e) => handleSubmit(e)}>
                 <h1 className="text-2xl py-10 text-black m-auto">MY PROFILE</h1>
                 <div className="flex justify-around">
                     <div>
-                        <FormField id="fullname" label="Fullname:" placeholder="Fullname" value={formState.fullname} onChange={handleChange} />
+                        <FormField id="displayName" label="Display Name:" placeholder={profile.displayName} value={formState.displayName} onChange={handleChange} />
                         <FormField id="gender" label="Gender:" placeholder="Gender" value={formState.gender} onChange={handleChange} />
                         <FormField id="age" label="Age" placeholder="Age" value={formState.age} onChange={handleChange} />
                         <FormField id="experience" label="Year of Experiences" placeholder="Year of Experiences" value={formState.experience} onChange={handleChange} />
                         <FormField id="participant" label="Number of participants" placeholder="Number of participants" value={formState.participant} onChange={handleChange} />
                         <FormField id="price" label="Price" placeholder="Price" value={formState.price} onChange={handleChange} />
                     </div>
-                    <ImageUploader defaultImage={UserDefaultImage} />
+                    <ImageUploader defaultImage={`${profile.photoURL ? profile.photoURL : UserDefaultImage}`} />
                 </div>
                 <div className="w-1/2 flex justify-evenly m-auto">
                     <button type="submit" className="rounded-lg px-12 py-4 bg-blue-400 hover:bg-blue-500 text-white">Save </button>
@@ -85,11 +78,12 @@ const Profile = () => {
             </form>
             <h2 className="text-black flex justify-center py-5 ">Certificate</h2>
             <div className="overflow-auto flex justify-evenly gap-5">
-                {Array(3).fill(
-                    <ImageUploader defaultImage={DefaultCertImg} />
-                )}
+                {Array(3).fill().map((_, index) => (
+                    <ImageUploader key={index} defaultImage={DefaultCertImg} />
+                ))}
             </div>
         </section>
+
 
     );
 };

@@ -10,11 +10,10 @@ const handleGetAllUsers = async (req, res) => {
     return res.send({ message: "All Users get successfully", users });
 }
 
-
 /* CREATE */
 const handleCreateUser = async (req, res) => {
     try {
-        const {email,password} = req.body; // req.body include {fullName, phoneNumber,email, password}
+        const { email, password } = req.body; // req.body include {displayName, phoneNumber,email, password}
         const userSnapshot = await User.where('email', '==', email).get();
         if (!userSnapshot.empty) {
             return res.status(400).send({ statusCode: 400 });
@@ -23,7 +22,7 @@ const handleCreateUser = async (req, res) => {
         const hashPassword = await bcrypt.hash(password, salt);
         req.body.password = hashPassword;
 
-        await User.add(req.body)
+        await User.add({ ...req.body, role: 'customer' })
             return res.status(201).send({ statusCode: 201 });
     } catch (error) {
         return res.status(500).send({ message: "Server fail", error: error.message });
@@ -61,9 +60,9 @@ const handleVerifyLogin = async (req, res) => {
         return;
     }
 
-    const id = userRef.docs[0].id;
-    const userData = {...user, id: id}
-    console.log(userData)
+    const userId = userRef.docs[0].id;
+    const userData = {...user, userId: userId}
+    console.log("handleVerifyLogin ==>",userData)
     return res.status(200).send({ message: 'Login successful', statusCode: 200, userData: userData });
 }
 

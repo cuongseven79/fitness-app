@@ -17,12 +17,11 @@ import { useAuth } from "./context/AuthContext";
 
 const App = () => {
 
-	const user = JSON.parse(sessionStorage.getItem('user'));
+	const userSection = JSON.parse(sessionStorage.getItem('user'));
 	const { setCurrentUser } = useAuth()
 	useEffect(() => {
-		setCurrentUser(user)
+		setCurrentUser(userSection)
 	}, []);
-	console.log(user)
 	return (
 		<BrowserRouter>
 			<Navbar />
@@ -33,7 +32,7 @@ const App = () => {
 				<Route path="gallery" element={<Gallery />} />
 				<Route path="plans" element={<Plans />} />
 				<Route path="trainers" element={<Trainers />} />
-				<Route path="profile" element={<Profile />} />
+				<Route path="profile/:id" element={<Profile />} />
 				<Route path="login" element={<Login />} />
 				<Route path="signup" element={<SignUp />} />
 				<Route path="*" element={<NotFound />} />
