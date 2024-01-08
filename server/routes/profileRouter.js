@@ -10,11 +10,17 @@ const upload = multer({ storage: tempStorage });
 
 
 /* CREATE method */
-const handleUpload = async (req, res) => {
+const handleUpload = async (req, res) => {  
   if (!req.file) { 
     return res.status(400).send('No file uploaded.');
   }
-  const { userId } = req.body
+
+  const { userId, typeImage } = req.body
+  const userRef = User.doc(userId);
+  const user = await userRef.get();
+
+  const certURLs =  user.data().certURL  //this line used to check changes of cert only to show remove button in ImageUploadCustomer component.
+
   const metadata = {
     metadata: { firebaseStorageDownloadTokens: uuid() },
     contentType: req.file.mimetype, 
@@ -22,11 +28,16 @@ const handleUpload = async (req, res) => {
   };
   const blob = bucket.file(req.file.originalname);
   const blobStream = blob.createWriteStream({ metadata, gzip: true });
-  blobStream.on('error', (err) => res.status(500).json({ error: err }));
+  blobStream.on('error', (err) => res.status(500).json({ error: err.message }));
   blobStream.on('finish', () => {
-    const photoURL = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-    User.doc(userId).update({ photoURL: photoURL });
-    res.status(201).json({ message:"Uploaded successfull" ,statusCode: 201, photoURL: photoURL });
+    const imageURL = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+
+    if (typeImage === 'photo') {
+      userRef.update({ photoURL: imageURL }); 
+    } else if (typeImage === 'certificate') {
+         userRef.update({ certURL: admin.firestore.FieldValue.arrayUnion(imageURL) });
+    }
+    res.status(201).json({ message:"Uploaded successfull" ,statusCode: 201, photoURL: imageURL, certURL: certURLs });
   });
   blobStream.end(req.file.buffer);
 };
@@ -34,7 +45,7 @@ const handleUpload = async (req, res) => {
 
 /* DELETE method */
 const handleDelete = async (req, res) => {
-  const { fileName, userId } = req.body;
+  const { fileName, userId, typeImage } = req.body;
   if (!fileName) { 
     return res.status(400).send('No image name provided.');
   }
@@ -43,16 +54,22 @@ const handleDelete = async (req, res) => {
   const user = await userRef.get();
 
   if (!user.exists) {
-  return res.status(404).send('User not found');
+    return res.status(404).send('User not found');
   }
+
   const imageRef = bucket.file(fileName);
+  const imageURL = `https://storage.googleapis.com/${bucket.name}/${imageRef.name}`;
   try {
-    await User.doc(userId).update({photoURL:""}) //set photoURL to "" in database
+    if (typeImage === 'photo') {
+      await User.doc(userId).update({ photoURL: "" }) //set photoURL to "" in database
+    } else if (typeImage === 'certificate') {
+      await User.doc(userId).update({ certURL: admin.firestore.FieldValue.arrayRemove(imageURL) }); //remove specific imageURL from certURL array in database
+    }
     await imageRef.delete(); //delete in storage image
   } catch (error) {
     return res.status(500).send('Delete failed with error.',error.message);
   }
-  return res.status(200).send('Image deleted successfull.');
+  return res.status(200).send('Image deleted successfully.');
 };
 
 /* GET method */

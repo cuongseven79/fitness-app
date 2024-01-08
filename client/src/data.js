@@ -1,5 +1,9 @@
 import React from "react";
 import { SiOpenaigym } from 'react-icons/si'
+import PT1 from './images/trainer1.jpg'
+import PT2 from './images/trainer2.jpg'
+import PT3 from './images/trainer3.jpg'
+import PT4 from './images/trainer4.jpg'
 
 
 
@@ -40,28 +44,28 @@ export const links = [
 export const programs = [
     {
         id: 1,
-        icon: <SiOpenaigym/>,
+        // trainer: <img src={PT1} width={200} alt="program one" />,
         title: "Program One",
         info: "This is the day that the lord has made. We will rejoice!",
         path: "/programs/111"
     },
     {
         id: 2,
-        icon: <SiOpenaigym/>,
+        // trainer: <img src={PT2} width={200} alt="program one" />,
         title: "Program Two",
         info: "This is the day that the lord has made. We will rejoice!",
         path: "/programs/222"
     },
     {
         id: 3,
-        icon: <SiOpenaigym/>,
+        // trainer: <img src={PT3} width={200} alt="program one" />,
         title: "Program Three",
         info: "This is the day that the lord has made. We will rejoice!",
         path: "/programs/333"
     },
     {
         id: 4,
-        icon: <SiOpenaigym/>,
+        // trainer: <img src={PT4} width={200} alt="program one" />,
         title: "Program Four",
         info: "This is the day that the lord has made. We will rejoice!",
         path: "/programs/444"

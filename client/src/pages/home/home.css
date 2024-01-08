@@ -19,10 +19,11 @@
     margin-top: -3rem;
 }
 
-.main__header-left h4 {
+.main__header-left h2 {
     margin-bottom: 1rem;
     color: var(--color-secondary);
     font-weight: 400;
+    font-size: 1.8rem;
 }
 
 .main__header-left p {
@@ -57,25 +58,34 @@
 
 
 /******************** PROGRAMS STYLES ********************/
-.programs {
+.trainers {
     margin-top: 4rem;
 }
 
-.program__wrapper {
+.trainer__wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 3rem;
     margin-top: 4rem;
 }
+.trainers__image {
+    filter: saturate(0.25);
+    transition: var(--transition);
+}
 
-.programs__program a {
+.trainers__image:hover {
+    filter: saturate(1);
+    transition: var(--transition);
+}
+
+.trainers__program a {
     margin-top: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.programs__program:hover a {
+.trainers__program:hover a {
     background: var(--color-secondary);
     color: var(--color-gray-600);
 }
@@ -308,7 +318,7 @@ footer {
     }
 
     /* PROGRAMS */
-    .program__wrapper {
+    .trainer__wrapper {
         grid-template-columns: 1fr 1fr;
     }
 
@@ -362,13 +372,13 @@ footer {
     }
 
     /* PROGRAMS */
-    .program__wrapper {
+    .trainer__wrapper {
         grid-template-columns: 1fr;
         gap: 2rem;
         margin-top: 3rem;
     }
 
-    .programs__program {
+    .trainers__trainer {
         width: 84%;
         margin: 0 auto;
     }

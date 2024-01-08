@@ -20,7 +20,10 @@ const Input = ({ inputRef, onImageChange }) => (
     />
 );
 
-const ImageUploader = ({ defaultImage }) => {
+const ImageUploader = ({
+    defaultImage,
+    typeImage = "photo" || "certificate",
+}) => {
     const inputRef = useRef();
     const [selectedImages, setSelectedImages] = useState([]);
     const { id } = useParams()
@@ -35,22 +38,20 @@ const ImageUploader = ({ defaultImage }) => {
             const formData = new FormData();
             formData.append('image', file);
             formData.append('userId', id);
+            formData.append('typeImage', typeImage);
             const res = await postProfile(formData);
-            console.log(res)
         }
     }
-
     const handleRemoveImage = async () => {
         if (selectedImages[0]) {
             const file = selectedImages[0];
-            await deleteImage(file.name, id);
+            await deleteImage(file.name, id, typeImage);
             setSelectedImages([]);
         }
         if (inputRef.current) {
             inputRef.current.value = "";
         }
     }
-
     return (
         <div className='flex flex-col'>
             <div className="relative ">

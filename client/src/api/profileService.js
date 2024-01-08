@@ -16,11 +16,12 @@ export const postProfile = async (formData) => {
   });
   return response.data;
 }
-export const deleteImage = async (imageName, userId) => {
+export const deleteImage = async (fileName, userId, typeImage) => {
   const response = await axios.delete(API_URL + "/profile/delete", {
     data: {
-      fileName: imageName,
-      userId: userId
+      fileName: fileName,
+      userId: userId,
+      typeImage: typeImage
     }
   });
   return response.data;
