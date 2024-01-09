@@ -62,7 +62,8 @@ export const programs = [
         title: "Program Three",
         info: "This is the day that the lord has made. We will rejoice!",
         path: "/programs/333"
-    },
+    }
+    ,
     {
         id: 4,
         // trainer: <img src={PT4} width={200} alt="program one" />,
@@ -70,6 +71,8 @@ export const programs = [
         info: "This is the day that the lord has made. We will rejoice!",
         path: "/programs/444"
     }
+    ,
+    
 ]
 
 
@@ -83,26 +86,26 @@ export const values = [
     {
         id: 1,
         icon: <SiOpenaigym/>,
-        title: "Value One",
-        desc: "Placeat quidem facere dicta modi? Pariatur exercitationem illum."
+        title: "80+ Expert Trainer",
+        desc: "Có hơn 80+ trainer với kinh nghiệm dày dặn đang giảng dạy trên nền tảng Fitness Online."
     },
     {
         id: 2,
         icon: <SiOpenaigym/>,
-        title: "Value Two",
-        desc: "Placeat quidem facere dicta modi? Pariatur exercitationem illum."
+        title: "10+ year",
+        desc: "Trung bình số năm kih nghiệm của các Trainer tại Fitness Online."
     },
     {
         id: 3,
-        icon: <SiOpenaigym/>,
-        title: "Value Three",
-        desc: "Placeat quidem facere dicta modi? Pariatur exercitationem illum."
+        icon: <SiOpenaigym />,
+        title: "5000+ Member ",
+        desc: "Tổng số học viên đang theo học tại Fitness Online."
     },
     {
         id: 4,
         icon: <SiOpenaigym/>,
-        title: "Value Four",
-        desc: "Placeat quidem facere dicta modi? Pariatur exercitationem illum."
+        title: "30+ years old",
+        desc: "Dộ tuổi trung bình của trainer là 30 tuổi."
     }
 ]
 
@@ -118,32 +121,32 @@ export const faqs = [
     {
         id: 1,
         question: "How often should I exercise?",
-        answer: "Consectetur adipisicing elit. Non ipsa dolorem, rem consequatur eum omnis ex, fuga temporibus qui nesciunt odio aliquam commodi culpa inventore ut similique repellendus perferendis sint!"
+        answer: "Exercise regularly, aiming for at least 150 minutes of moderate-intensity or 75 minutes of vigorous-intensity activity per week, plus strength training."
     },
     {
         id: 2,
         question: "What time of day is best to work out?",
-        answer: "Distinctio nihil blanditiis accusantium atque, quo maxime inventore eum! Cum dolorem quibusdam amet et qui. Eos, omnis beatae? Quas, est at! Molestiae quidem ab soluta exercitationem culpa nostrum iusto illum qui non a harum deserunt atque commodi at velit."
+        answer: "The best time to work out depends on personal preference and schedule. Morning workouts may boost energy, while evening workouts aid performance.."
     },
     {
         id: 3,
         question: "How long should my workouts be?",
-        answer: "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content."
+        answer: "Aim for 150 minutes of moderate-intensity or 75 minutes of vigorous-intensity aerobic exercise weekly, complemented by strength training at least twice."
     },
     {
         id: 4,
         question: "Do I need to warm up before my workouts?",
-        answer: "Molestiae quidem ab soluta exercitationem culpa nostrum iusto illum qui non a harum deserunt atque commodi at velit, consequatur quibusdam dignissimos cum labore possimus placeat consectetur nisi cupiditate? Qui totam est omnis dolor nobis quisquam veritatis a!"
+        answer: "Yes, warming up is crucial. Spend 5-10 minutes on light aerobic activity and dynamic stretches to prepare your body for exercise.!"
     },
     {
         id: 5,
         question: "Should I do strength training, cardio or both?",
-        answer: "Maiores fuga, cum praesentium esse laudantium! Distinctio nihil blanditiis accusantium atque, quo maxime inventore eum! Cum dolorem quibusdam amet et qui."
+        answer: "For overall health, a balanced approach is ideal. Combine strength training and cardio for comprehensive fitness benefits and improved well-being."
     },
     {
         id: 6,
         question: "Should I lift weights for strength training?",
-        answer: "Quas, est at! Molestiae quidem ab soluta exercitationem culpa nostrum iusto illum qui non a harum deserunt atque commodi at velit, consequatur quibusdam dignissimos cum labore possimus placeat consectetur nisi cupiditate."
+        answer: "Yes, lifting weights is an effective form of strength training. It helps build muscle strength, tone, and supports overall fitness.."
     }
 ]
 
