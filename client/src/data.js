@@ -1,12 +1,15 @@
 import React from "react";
-import { SiOpenaigym } from 'react-icons/si'
+import { GiWeightLiftingUp, GiBoxingGlove } from "react-icons/gi";
+import { LiaDumbbellSolid } from "react-icons/lia";
+import { GiHighPunch } from "react-icons/gi";
+import { GrYoga } from "react-icons/gr";
+import { TbYoga } from "react-icons/tb";
 import PT1 from './images/trainer1.jpg'
 import PT2 from './images/trainer2.jpg'
 import PT3 from './images/trainer3.jpg'
 import PT4 from './images/trainer4.jpg'
 
-
-
+/* ==================== LINKS DATA  ====================*/
 export const links = [
     {
         name: "Home",
@@ -38,73 +41,43 @@ export const links = [
 
 
 
-
-
+/* ==================== PROGRAM DATA  ====================*/
 
 export const programs = [
     {
         id: 1,
-        // trainer: <img src={PT1} width={200} alt="program one" />,
-        title: "Program One",
-        info: "This is the day that the lord has made. We will rejoice!",
-        path: "/programs/111"
-    },
-    {
-        id: 2,
-        // trainer: <img src={PT2} width={200} alt="program one" />,
-        title: "Program Two",
-        info: "This is the day that the lord has made. We will rejoice!",
-        path: "/programs/222"
-    },
-    {
-        id: 3,
-        // trainer: <img src={PT3} width={200} alt="program one" />,
-        title: "Program Three",
-        info: "This is the day that the lord has made. We will rejoice!",
-        path: "/programs/333"
-    }
-    ,
-    {
-        id: 4,
-        // trainer: <img src={PT4} width={200} alt="program one" />,
-        title: "Program Four",
-        info: "This is the day that the lord has made. We will rejoice!",
-        path: "/programs/444"
-    }
-    ,
-    
-]
-
-
-
-
-
-
-
-
-export const values = [
-    {
-        id: 1,
-        icon: <SiOpenaigym/>,
-        title: "80+ Expert Trainer",
+        icon: <GiWeightLiftingUp />,
+        title: "Weight Lifting",
         desc: "Có hơn 80+ trainer với kinh nghiệm dày dặn đang giảng dạy trên nền tảng Fitness Online."
     },
     {
         id: 2,
-        icon: <SiOpenaigym/>,
-        title: "10+ year",
+        icon: <TbYoga />,
+        title: "Yoga",
         desc: "Trung bình số năm kih nghiệm của các Trainer tại Fitness Online."
     },
     {
         id: 3,
-        icon: <SiOpenaigym />,
-        title: "5000+ Member ",
+        icon: <GrYoga />,
+        title: "Pilates ",
         desc: "Tổng số học viên đang theo học tại Fitness Online."
     },
     {
         id: 4,
-        icon: <SiOpenaigym/>,
-        title: "30+ years old",
+        icon: <GiBoxingGlove/>,
+        title: "Boxing",
+        desc: "Dộ tuổi trung bình của trainer là 30 tuổi."
+    },
+    {
+        id: 5,
+        icon: <LiaDumbbellSolid/>,
+        title: "Weight training",
+        desc: "Dộ tuổi trung bình của trainer là 30 tuổi."
+    },
+    {
+        id: 6,
+        icon: <GiHighPunch/>,
+        title: "Taekwondo",
         desc: "Dộ tuổi trung bình của trainer là 30 tuổi."
     }
 ]
@@ -113,9 +86,7 @@ export const values = [
 
 
 
-
-
-
+/* ==================== FAQS DATA  ====================*/
 
 export const faqs = [
     {
@@ -155,7 +126,7 @@ export const faqs = [
 
 
 
-
+/* ==================== TESTIMONIAL DATA  ====================*/
 
 export const testimonials = [
     {
@@ -199,7 +170,7 @@ export const testimonials = [
 
 
 
-
+/* ==================== PLANS DATA  ====================*/
 
 export const plans = [
     {

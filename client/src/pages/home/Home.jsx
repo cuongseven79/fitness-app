@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import "./home.css";
 import MainHeader from "../../components/MainHeader";
-import Values from "../../components/Values";
+import Programs from "../../components/Programs";
 import FAQs from "../../components/FAQs";
 import Testimonial from "../../components/Testimonial";
 import TrainersPopular from "../../components/TrainersPopular";
+import StatsComponent from "../../components/StatsComponent";
 
 const Home = () => {
 	useEffect(() => {
@@ -13,8 +14,9 @@ const Home = () => {
 	return (
 		<>
 			<MainHeader />
+			<StatsComponent/>
 			<TrainersPopular />
-			<Values />
+			<Programs />
 			<FAQs />
 			<Testimonial />
 			{/* <Footer /> */}

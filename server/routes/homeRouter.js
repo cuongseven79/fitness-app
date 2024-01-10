@@ -5,7 +5,11 @@ const { User } = require('../config/firebase-config');
 /* GET */
 const handleGetTrainersPopular = async (req, res) => {
     try {
-        const snapshot = await User.where('role', '==', 'pt').where('rating', '>=', '4').get();
+        const snapshot = await User.where('role', '==', 'pt')
+                           .where('rating', '>=', '5')
+                           .where('field', 'in', ['taekwondo', 'yoga', 'boxing'])
+                           .limit(3)
+                           .get();
         if (snapshot.empty) {
             return res.status(400).json({ statusCode: 400, message: "No trainers found" });
         }
