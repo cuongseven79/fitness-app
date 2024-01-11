@@ -61,7 +61,8 @@ const handleVerifyLogin = async (req, res) => {
     }
 
     const userId = userRef.docs[0].id;
-    const userData = {...user, userId: userId}
+    const userData = { ...user, userId: userId }
+    
     console.log("handleVerifyLogin ==>",userData)
     return res.status(200).send({ message: 'Login successful', statusCode: 200, userData: userData });
 }

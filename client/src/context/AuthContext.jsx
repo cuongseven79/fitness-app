@@ -73,7 +73,7 @@ export function AuthProvider({ children }) {
 			if (statusCode === 200) {
 				const { password, ...user } = userData;
 				setCurrentUser(user);
-				sessionStorage.setItem('user', JSON.stringify({ userId: user.userId, displayName: user.displayName }));
+				sessionStorage.setItem('user', JSON.stringify({ userId: user.userId, displayName: user.displayName, role: user.role }));
 				return { message: "Register successfully", statusCode: statusCode };
 			}
 		} catch (error) {

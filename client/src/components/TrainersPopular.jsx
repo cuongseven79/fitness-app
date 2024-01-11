@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
 import PT1 from '../images/trainer1.jpg';
 import ModalCustom from '../components/ModalCustom';
-import { getTrainersPopular } from "../api/homeService";
+import { getDataDashboard, getTrainersPopular } from "../api/homeService";
 
 const TrainerModal = ({ open, setOpen, trainer }) => {
 	const { displayName, email, price, phoneNumber, photoURL, certURL } = trainer || {};
@@ -20,10 +20,6 @@ const TrainerModal = ({ open, setOpen, trainer }) => {
 						<span>{displayName}</span>
 					</li>
 					<li className="py-1 flex justify-between items-center gap-10 text-sm font-medium text-gray-900 dark:text-white">
-						<label>{'Phone Number:'}</label>
-						<span>{phoneNumber}</span>
-					</li>
-					<li className="py-1 flex justify-between items-center gap-10 text-sm font-medium text-gray-900 dark:text-white">
 						<label>{'Price: '}</label>
 						<span>{price}</span>
 					</li>
@@ -31,9 +27,11 @@ const TrainerModal = ({ open, setOpen, trainer }) => {
 				<img src={photoURL} className='w-40 h-40 rounded-full' alt="Trainer" />
 
 			</div>
-			<h2 className="py-5 font-medium text-gray-900 dark:text-white">Certificate</h2>
-			<div className="overflow-auto flex gap-5">
-				{certURL?.map((cert, index) => <img key={index} src={cert} className='w-40' alt={`Certificate ${index + 1}`} />)}
+			<div className={`${!certURL && "hidden"}`}>
+				<h2 className="py-5 font-medium text-gray-900 dark:text-white">Certificate</h2>
+				<div className="overflow-auto flex gap-5">
+					{certURL?.map((cert, index) => <img key={index} src={cert} className='w-40' alt={`Certificate ${index + 1}`} />)}
+				</div>
 			</div>
 		</ModalCustom>
 	)
@@ -50,7 +48,7 @@ const TrainersPopular = () => {
 	}
 
 	async function fetchTrainer() {
-		const { statusCode, trainers } = await getTrainersPopular();
+		const { statusCode, trainers } = await getDataDashboard("/best-trainers");
 		if (statusCode === 200) {
 			setTrainers(trainers)
 		}
@@ -58,7 +56,6 @@ const TrainersPopular = () => {
 	useEffect(() => {
 		fetchTrainer();
 	}, [])
-	console.log(trainers)
 	if (!trainers) {
 		return <h1>Loading...</h1>
 	}
@@ -67,15 +64,17 @@ const TrainersPopular = () => {
 			<div className="container trainers">
 				<SectionHead icon={<FaCrown />} title="The best coaches" />
 				<div className="trainers">
-					<div className="container grid grid-cols-3 gap-16">
+					<div className="container grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-16">
 						{trainers.map((trainer, index) => {
 							return (
 								<Card className="" key={index}>
 									<div onClick={() => handleClickOnTrainer(trainer)} className="relative group mb-5 transition-all duration-200 hover:saturate-100 cursor-pointer">
-										<img src={trainer.photoURL} className="rounded-3xl h-48 w-full md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl" alt="trainer one" />
-										<div class="opacity-0 bg-gradient-to-t from-gray-800 via-gray-800 to-opacity-30 group-hover:opacity-50 absolute top-0 left-0 h-full w-full"></div>
-										<div class="absolute top-0 left-0 w-full h-full flex justify-center items-center opacity-0 hover:opacity-100">
-											<h1 class="text-lg">View information</h1>
+										<div className="px-10">
+											<img src={trainer.photoURL} className="object-fill rounded-3xl w-full h-56 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl" alt="trainer one" />
+										</div>
+										<div className="opacity-0 bg-gradient-to-t from-gray-800 via-gray-800 to-opacity-30 group-hover:opacity-50 absolute top-0 left-0 h-full w-full "></div>
+										<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center opacity-0 hover:opacity-100 ">
+											<h1 className="text-lg">View information</h1>
 										</div>
 									</div>
 									<h3 className="text-[20px]">{trainer.displayName}</h3>

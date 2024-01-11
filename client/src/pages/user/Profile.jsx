@@ -4,6 +4,7 @@ import DefaultCertImg from "../../images/cert-frame.png";
 import UserDefaultImage from "../../images/user_profile.png";
 import { getProfile } from "../../api/profileService";
 import { useParams } from "react-router-dom";
+import { adminCustomerRole } from "../../utils/checkRole";
 
 const FormField = ({ id, label, placeholder, value, onChange }) => (
     <li className="py-3 flex justify-between items-center gap-10">
@@ -14,16 +15,15 @@ const FormField = ({ id, label, placeholder, value, onChange }) => (
 
 const Profile = () => {
     const [profile, setProfile] = useState(null);
-    // const [profile, setProfile] = useState(null);
     const [formState, setFormState] = useState({
         displayName: '',
         gender: '',
         age: '',
         experience: '',
         phoneNumber: '',
+        address: '',
         price: ''
     });
-
     const { id } = useParams() // {id} get from Router path <App/> in App.js
     function handleChange(e) {
         setFormState({
@@ -50,7 +50,7 @@ const Profile = () => {
     useEffect(() => {
         document.title = `Profile`;
         fetchProfile();
-    }, []); 
+    }, []);
     console.log(profile)
     if (!profile) {
         return <h1>Loading...</h1>
@@ -66,6 +66,7 @@ const Profile = () => {
                         <FormField id="age" label="Age" placeholder="Age" value={formState.age} onChange={handleChange} />
                         <FormField id="experience" label="Year of Experiences" placeholder="Year of Experiences" value={formState.experience} onChange={handleChange} />
                         <FormField id="phoneNumber" label="Phone Number" placeholder="Phone Number" value={formState.phoneNumber} onChange={handleChange} />
+                        <FormField id="address" label="Address" placeholder="Address" value={formState.address} onChange={handleChange} />
                         <FormField id="price" label="Price" placeholder="Price" value={formState.price} onChange={handleChange} />
                     </div>
                     <ImageUploader defaultImage={`${profile.photoURL ? profile.photoURL : UserDefaultImage}`} typeImage={"photo"} />
@@ -75,22 +76,24 @@ const Profile = () => {
                     <button type="reset" className="rounded-lg px-12 py-4 bg-gray-400 hover:bg-gray-500 text-white">Cancel</button>
                 </div>
             </form>
-            <h2 className="text-black flex justify-center py-5">Certificate</h2>
-            <div className="overflow-auto flex gap-5">
-                {
-                    profile.certURL && profile.certURL?.length > 0
-                        ? (
-                            <>
-                                <ImageUploader key={profile.certURL.length} defaultImage={DefaultCertImg} typeImage={'certificate'} />
-                                {profile.certURL.map((cert, index) => (
-                                    <ImageUploader key={index} defaultImage={`${cert ? cert : DefaultCertImg}`} typeImage={'certificate'} />
-                                ))}
-                            </>
-                        )
-                        : Array(4).fill().map((_, index) => (
-                            <ImageUploader key={index} defaultImage={DefaultCertImg} typeImage={'certificate'} />
-                        ))
-                }
+            <div className={`${adminCustomerRole ? 'hidden' : ""}`}>
+                <h2 className="text-black flex justify-center py-5">Certificate</h2>
+                <div className="overflow-auto flex gap-5">
+                    {
+                        profile.certURL && profile.certURL?.length > 0
+                            ? (
+                                <>
+                                    <ImageUploader key={profile.certURL.length} defaultImage={DefaultCertImg} typeImage={'certificate'} />
+                                    {profile.certURL.map((cert, index) => (
+                                        <ImageUploader key={index} defaultImage={`${cert ? cert : DefaultCertImg}`} typeImage={'certificate'} />
+                                    ))}
+                                </>
+                            )
+                            : Array(4).fill().map((_, index) => (
+                                <ImageUploader key={index} defaultImage={DefaultCertImg} typeImage={'certificate'} />
+                            ))
+                    }
+                </div>
             </div>
         </section>
     );

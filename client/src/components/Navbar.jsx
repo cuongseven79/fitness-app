@@ -7,6 +7,7 @@ import { FaBars } from 'react-icons/fa';
 import { MdOutlineClose } from "react-icons/md";
 import "./navbar.css";
 import DropdownCustom from "./DropdownCustom";
+import { userSection } from "../utils/checkRole";
 
 
 
@@ -24,7 +25,7 @@ const NavItem = ({ name, path, handleNavToggle }) => (
 
 const Navbar = () => {
 	const [isNavShowing, setIsNavShowing] = useState(false);
-	const userSection = JSON.parse(sessionStorage.getItem('user'));
+	
 	const items = [
 		{
 			title: "My profile",
