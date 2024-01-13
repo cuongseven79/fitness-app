@@ -92,25 +92,25 @@
     gap: 12%;
 }
 
-.programs__image {
+/* .programs__image {
     filter: saturate(0.25);
     transition: var(--transition);
-}
+} */
 
-.programs__image:hover {
+/* .programs__image:hover {
     filter: saturate(1);
     transition: var(--transition);
 }
 
 .programs__right > p {
     margin: 1.5rem 0 2rem;
-}
+} */
 
-.programs__wrapper {
+/* .programs__wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3.4rem 2.4rem; /*3.4 for row 2.4 for column*/
-}
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3.4rem 2.4rem;
+} */
 
 /*
 .card.programs__card {
@@ -192,7 +192,9 @@
     box-shadow: 0 1.5rem 2rem rgba(26, 26, 54, 0.4) ;
     transition: var(--transition);
 }
- 
+.testimonials__btn svg {
+    fill: var(--color-primary);
+}
 .testimonial:hover .testimonial__avatar{
     border-radius: 50%;
     border-color: var(--color-gray-400);
@@ -223,13 +225,17 @@
 }
 
 .testimonials__btn svg {
-    fill: var(--color-primary);
     font-size: 1.8rem;
     width: 3rem;
     height: 3rem;
 }
-
-
+.testimonials__btn:hover svg {
+    fill: var(--color-secondary);
+    color: var(--color-gray-600);
+    font-size: 1.8rem;
+    width: 3rem;
+    height: 3rem;
+}
 
 /******************** FOOTER STYLES ********************/
 footer {

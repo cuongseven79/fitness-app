@@ -4,28 +4,33 @@ import SectionHead from "./SectionHead";
 import Card from "./Card";
 import { Link } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
-import PT1 from '../images/trainer1.jpg';
 import ModalCustom from '../components/ModalCustom';
 import { getDataDashboard, getTrainersPopular } from "../api/homeService";
 
+const TrainerInfoItem = ({ label, value }) => (
+	value && (
+		<li className="flex justify-between items-center gap-10 text-sm font-medium text-gray-900 dark:text-white">
+			<label>{label}</label>
+			<span>{value}</span>
+		</li>
+	)
+);
+
 const TrainerModal = ({ open, setOpen, trainer }) => {
-	const { displayName, email, price, phoneNumber, photoURL, certURL } = trainer || {};
+	const { displayName, price, photoURL, certURL, yearsOfExp, age, address, gender } = trainer || {};
 
 	return (
 		<ModalCustom title="Trainer Information" open={open} setOpen={setOpen} >
 			<div className="py-4 flex justify-between">
-				<ul className="">
-					<li className="py-1 flex justify-between items-center gap-10 text-sm font-medium text-gray-900 dark:text-white">
-						<label>{'Display Name: '}</label>
-						<span>{displayName}</span>
-					</li>
-					<li className="py-1 flex justify-between items-center gap-10 text-sm font-medium text-gray-900 dark:text-white">
-						<label>{'Price: '}</label>
-						<span>{price}</span>
-					</li>
+				<ul className="space-y-7">
+					<TrainerInfoItem label="Display Name: " value={displayName} />
+					<TrainerInfoItem label="Gender: " value={gender} />
+					<TrainerInfoItem label="Age" value={age} />
+					<TrainerInfoItem label="Year Of Experiences: " value={yearsOfExp} />
+					<TrainerInfoItem label="Address" value={address} />
+					<TrainerInfoItem label="Price: " value={`$ ${price}/month`} />
 				</ul>
 				<img src={photoURL} className='w-40 h-40 rounded-full' alt="Trainer" />
-
 			</div>
 			<div className={`${!certURL && "hidden"}`}>
 				<h2 className="py-5 font-medium text-gray-900 dark:text-white">Certificate</h2>
@@ -61,23 +66,23 @@ const TrainersPopular = () => {
 	}
 	return (
 		<section className="trainers">
-			<div className="container trainers">
-				<SectionHead icon={<FaCrown />} title="The best coaches" />
+			<div className="container">
+				<SectionHead icon={<FaCrown />} title="Team Of Expert Coaches" />
 				<div className="trainers">
 					<div className="container grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 gap-16">
 						{trainers.map((trainer, index) => {
 							return (
 								<Card className="" key={index}>
 									<div onClick={() => handleClickOnTrainer(trainer)} className="relative group mb-5 transition-all duration-200 hover:saturate-100 cursor-pointer">
-										<div className="px-10">
-											<img src={trainer.photoURL} className="object-fill rounded-3xl w-full h-56 md:max-w-sm lg:max-w-md xl:max-w-lg 2xl:max-w-xl" alt="trainer one" />
+										<div className="w-full h-60 bg-contain">
+											<img src={trainer.photoURL} className="rounded-3xl w-full h-full" style={{ objectPosition: "10px -20px" }} alt="trainer one" />
 										</div>
 										<div className="opacity-0 bg-gradient-to-t from-gray-800 via-gray-800 to-opacity-30 group-hover:opacity-50 absolute top-0 left-0 h-full w-full "></div>
 										<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center opacity-0 hover:opacity-100 ">
 											<h1 className="text-lg">View information</h1>
 										</div>
 									</div>
-									<h3 className="text-[20px]">{trainer.displayName}</h3>
+									<h3 className="text-[20px] text-[#EAB308] font-semibold">{trainer.displayName}</h3>
 									<p>{trainer.field}</p>
 									<div className="my-3 flex justify-evenly mx-auto items-center">
 										<h1>{`$ ${trainer.price}`}</h1>
@@ -90,13 +95,11 @@ const TrainersPopular = () => {
 									<div className="flex justify-center mb-5">
 										{Array(Math.round(trainer.rating)).fill(<AiFillStar color="yellow" />)}
 									</div>
-									{/* <small className="mb-3">{info}</small> */}
 									<Link to={"plans"} className="btn sm">Booking</Link>
 								</Card>
 							);
 						})}
 					</div>
-
 				</div>
 			</div>
 			<TrainerModal open={open} setOpen={setOpen} trainer={trainerInfor} />

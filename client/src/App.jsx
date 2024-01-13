@@ -19,6 +19,7 @@ import { useAuth } from "./context/AuthContext";
 import { userSection } from "./utils/checkRole";
 
 const App = () => {
+	
 	const { setCurrentUser } = useAuth()
 	useEffect(() => {
 		setCurrentUser(userSection)

@@ -4,33 +4,21 @@ import SectionHead from "./SectionHead";
 import { GiCutDiamond } from "react-icons/gi";
 import { programs } from "../data";
 import Card from "./Card";
-import Carousel from "./CarouselCustom";
 
 
 const Programs = () => {
 	return (
-		<section className="programs">
-			<div className="container programs__container">
-				<div className="programs__left ">
-					<div className="">
-						<Carousel  />
-					</div>
-				</div>
-				<div className="programs__right">
-					<SectionHead icon={<GiCutDiamond />} title="Programs" />
-					<p>
-						With professional support and a team of experienced coaches, we are committed to providing customers with a unique and effective workout experience. From building muscle, to increasing strength, to improving mental clarity and flexibility, we give people the opportunity to achieve their best health and lifestyle!
-					</p>
-					<div className="programs__wrapper">
-						{programs.map(({ id, icon, title, desc }) => (
-							<Card key={id}>
-								<span>{icon}</span>
-								<h4>{title}</h4>
-								<small>{desc}</small>
-							</Card>
-						))}
-					</div>
-				</div>
+		<section className="container ">
+			<SectionHead icon={<GiCutDiamond />} title="Programs" />
+			<p className="my-12">With professional support and a team of experienced coaches, we are committed to providing customers with a unique and effective workout experience. From building muscle, to increasing strength, to improving mental clarity and flexibility, we give people the opportunity to achieve their best health and lifestyle!</p>
+			<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-14 gap-y-10">
+				{programs.map(({ id, icon, title, desc }) => (
+					<Card key={id}>
+						<span>{icon}</span>
+						<h4>{title}</h4>
+						<small>{desc}</small>
+					</Card>
+				))}
 			</div>
 		</section>
 	);

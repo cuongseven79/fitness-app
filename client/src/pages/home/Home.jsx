@@ -6,6 +6,8 @@ import FAQs from "../../components/FAQs";
 import Testimonial from "../../components/Testimonial";
 import TrainersPopular from "../../components/TrainersPopular";
 import StatsComponent from "../../components/StatsComponent";
+import BMI from "../../components/bmi/BMI";
+import Feedback from "../../components/Feedback";
 
 const Home = () => {
 	useEffect(() => {
@@ -14,11 +16,13 @@ const Home = () => {
 	return (
 		<>
 			<MainHeader />
-			<StatsComponent/>
+			<StatsComponent />
 			<TrainersPopular />
 			<Programs />
+			<BMI />
 			<FAQs />
 			<Testimonial />
+			<Feedback />
 			{/* <Footer /> */}
 		</>
 	);

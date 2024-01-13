@@ -51,7 +51,6 @@ const Profile = () => {
         document.title = `Profile`;
         fetchProfile();
     }, []);
-    console.log(profile)
     if (!profile) {
         return <h1>Loading...</h1>
     }
