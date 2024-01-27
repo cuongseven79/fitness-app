@@ -13,10 +13,11 @@ import Footer from "./components/Footer";
 import Profile from "./pages/user/Profile";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
-
+import OrderManagement from "./pages/ordermanagement/OrderManagement";
 // check Role
 import { useAuth } from "./context/AuthContext";
 import { userSection } from "./utils/checkRole";
+
 
 const App = () => {
 	
@@ -37,9 +38,11 @@ const App = () => {
 				<Route path="trainers" element={<Trainers />} />
 				{userSection && <Route path="profile/:id" element={<Profile />} />}
 				{userSection?.role === 'admin' && <Route path="manage-customers" element={<Login />} />}
+				{userSection?.role === 'admin' && <Route path="manage-order" element={<OrderManagement  />} />}
 				<Route path="login" element={<Login />} />
 				<Route path="signup" element={<SignUp />} />
 				<Route path="*" element={<NotFound />} />
+				
 			</Routes>
 			<Footer />
 		</BrowserRouter>
