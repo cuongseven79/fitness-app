@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
 import ModalCustom from '../components/ModalCustom';
 import { getDataDashboard, getTrainersPopular } from "../api/homeService";
+import loadingGIF from "../images/loading.gif";
 
 const TrainerInfoItem = ({ label, value }) => (
 	value && (
@@ -61,8 +62,11 @@ const TrainersPopular = () => {
 	useEffect(() => {
 		fetchTrainer();
 	}, [])
-	if (!trainers) {
-		return <h1>Loading...</h1>
+
+	if (!trainers.length) {
+		return <div className="flex justify-center ">
+			<img className="w-24" src={loadingGIF} alt="Loading" />
+		</div>
 	}
 	return (
 		<section className="trainers">
@@ -75,7 +79,7 @@ const TrainersPopular = () => {
 								<Card className="" key={index}>
 									<div onClick={() => handleClickOnTrainer(trainer)} className="relative group mb-5 transition-all duration-200 hover:saturate-100 cursor-pointer">
 										<div className="w-full h-60 bg-contain">
-											<img src={trainer.photoURL} className="rounded-3xl w-full h-full" style={{ objectPosition: "10px -20px" }} alt="trainer one" />
+											<img src={trainer.photoURL} className=" w-full h-full" style={{ objectPosition: "10px -20px" }} alt="trainer one" />
 										</div>
 										<div className="opacity-0 bg-gradient-to-t from-gray-800 via-gray-800 to-opacity-30 group-hover:opacity-50 absolute top-0 left-0 h-full w-full "></div>
 										<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center opacity-0 hover:opacity-100 ">
@@ -84,9 +88,9 @@ const TrainersPopular = () => {
 									</div>
 									<h3 className="text-[20px] text-[#EAB308] font-semibold">{trainer.displayName}</h3>
 									<p>{trainer.field}</p>
-									<div className="my-3 flex justify-evenly mx-auto items-center">
-										<h1>{`$ ${trainer.price}`}</h1>
-										<select name="" id="" className="text-black px-1 rounded-md">
+									<div className="my-3 flex justify-center items-center text-[18px] space-x-12">
+										<h1 className="">{`$ ${trainer.price}`}</h1>
+										<select name="" id="" className="text-black rounded-md px-5 py-2 font-sans">
 											<option value="">1 month</option>
 											<option value="">2 month</option>
 											<option value="">3 month</option>
@@ -95,7 +99,7 @@ const TrainersPopular = () => {
 									<div className="flex justify-center mb-5">
 										{Array(Math.round(trainer.rating)).fill(<AiFillStar color="yellow" />)}
 									</div>
-									<Link to={"plans"} className="btn sm">Booking</Link>
+									<Link to={"plans"} className="btn md">Booking</Link>
 								</Card>
 							);
 						})}

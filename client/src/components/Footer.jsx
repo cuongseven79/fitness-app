@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Logo from "../images/logo.png";
+import Logo from "../images/logo.jpg";
 import { FaLinkedin } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { AiOutlineTwitter } from "react-icons/ai";
@@ -11,17 +11,15 @@ const Footer = () => {
 		<footer>
 			<div className="container footer__container">
 				<article>
-					<Link to="/" className="logo">
-						<img src={Logo} alt="Footer Logo" />
+					<Link to="/" className="logo" reloadDocument>
+						<img src={Logo} className="rounded-3xl " alt="Footer Logo" />
 					</Link>
 					<p>
-						Consectetur non nostrud enim nostrud est culpa ullamco incididunt
-						nisi. Consectetur non nostrud enim nostrud est culpa ullamco
-						incididunt nisi.
+						A3 - Hong Phat, Ninh Kieu district, Can Tho city, Vietnam
 					</p>
 					<div className="footer__socials">
 						<a
-							href="https://www.linkedin.com/in/eniola-ademola-7386161a7/"
+							href="https://www.linkedin.com/in/tran-gia-cuong-908724216/"
 							target="_blank"
 							rel="noreferrer noopener"
 						>
@@ -35,14 +33,14 @@ const Footer = () => {
 							<FaFacebookF />
 						</a>
 						<a
-							href="https://twitter.com/_daveworld"
+							href="https://twitter.com/"
 							target="_blank"
 							rel="noreferrer noopener"
 						>
 							<AiOutlineTwitter />
 						</a>
 						<a
-							href="https://instagram.com/_daveworld"
+							href="https://instagram.com/"
 							target="_blank"
 							rel="noreferrer noopener"
 						>
@@ -73,7 +71,7 @@ const Footer = () => {
 				</article>
 			</div>
 			<div className="footer__copyright">
-				<small> &copy; Eniola Ademola </small>
+				<small> &copy; Cuong Seven </small>
 			</div>
 		</footer>
 	);

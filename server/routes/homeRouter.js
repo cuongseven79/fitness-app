@@ -66,7 +66,7 @@ const handlePostFeedback = async (req, res) => {
     try {
         const { displayName, title, message } = req.body;
         console.log(displayName, title, message)
-        await Feedback.doc().set({displayName, title, message, public_status:'published'});
+        await Feedback.doc().set({displayName, title, message, public_status:'unpublished'});
         return res.status(200).json({ message: "Feedback sent successfully", statusCode: 200 });
     } catch (error) {
         console.error(error);

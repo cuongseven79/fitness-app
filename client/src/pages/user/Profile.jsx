@@ -5,6 +5,7 @@ import UserDefaultImage from "../../images/user_profile.png";
 import { getProfile } from "../../api/profileService";
 import { useParams } from "react-router-dom";
 import { adminCustomerRole } from "../../utils/checkRole";
+import loadingGIF from "../../images/loading.gif"
 
 const FormField = ({ id, label, placeholder, value, onChange }) => (
     <li className="py-3 flex justify-between items-center gap-10">
@@ -15,6 +16,7 @@ const FormField = ({ id, label, placeholder, value, onChange }) => (
 
 const Profile = () => {
     const [profile, setProfile] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [formState, setFormState] = useState({
         displayName: '',
         gender: '',
@@ -33,7 +35,9 @@ const Profile = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         console.log(formState);
+        
     }
 
     const fetchProfile = async () => {
@@ -52,7 +56,9 @@ const Profile = () => {
         fetchProfile();
     }, []);
     if (!profile) {
-        return <h1>Loading...</h1>
+        return <div className="w-40 mt-44 mx-auto" >
+            <img src={loadingGIF} alt="Loading" />
+        </div>
     }
     return (
         <section className="p-10 rounded-2xl bg-white container text-black">
@@ -71,7 +77,12 @@ const Profile = () => {
                     <ImageUploader defaultImage={`${profile.photoURL ? profile.photoURL : UserDefaultImage}`} typeImage={"photo"} />
                 </div>
                 <div className="w-1/2 flex justify-evenly m-auto">
-                    <button type="submit" className="rounded-lg px-12 py-4 bg-blue-400 hover:bg-blue-500 text-white">Save </button>
+                    <button type="submit" className="rounded-lg px-12 py-4 bg-blue-400 hover:bg-blue-500 text-white">
+                        {loading ?
+                            <img className="w-20 px-6 " src={loadingGIF} alt="Loading" />
+                            : 'Save'
+                        }
+                    </button>
                     <button type="reset" className="rounded-lg px-12 py-4 bg-gray-400 hover:bg-gray-500 text-white">Cancel</button>
                 </div>
             </form>
