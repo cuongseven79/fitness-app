@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { getOrder } from "../../api/orderService";
 import ImageUploader from "../../components/ImageUploadCustom";
 import UserDefaultImage from "../../images/user_profile.png";
-import './order-management.css';
+import './orderManagement.css';
 
-const OrderManagement = () => {
+const ManageOrders = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [allOrders, setAllOrders] = useState([]);
@@ -91,8 +91,7 @@ const OrderManagement = () => {
 
         <table className="orders-table">
           <thead>
-            <tr>
-            <th>Display Name</th>
+            <tr><th>Display Name</th>
               <th>Date</th>
               <th>Order ID</th>
               <th>Service Type</th>
@@ -153,4 +152,4 @@ const OrderManagement = () => {
   );
 };
 
-export default OrderManagement;
+export default ManageOrders;

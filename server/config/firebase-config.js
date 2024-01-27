@@ -23,5 +23,6 @@ const firebaseAdmin = initializeApp();
 const database = firebaseAdmin.firestore();
 const User = database.collection("Users");
 const Feedback = database.collection("Feedbacks");
+const Order = database.collection("Orders")
 
-module.exports = {User, Feedback};
+module.exports = {User, Feedback,Order};
