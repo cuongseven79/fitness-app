@@ -80,18 +80,20 @@ const ManageOrders = () => {
             <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
           </div>
 
-          <button className="bold-text" onClick={handleFilter}>
-            Filter
-          </button>
+          <button className="button" onClick={handleFilter}>
+  Filter
+</button>
         </div>
 
         <div className="total-money">
-          <p>Total Money: $ {totalMoney.toFixed(2)}</p>
+        <p><span>Total Money:</span> $ {totalMoney.toFixed(2)}</p>
         </div>
 
         <table className="orders-table">
           <thead>
-            <tr><th>Display Name</th>
+            <tr>
+              <th>STT</th>
+              <th>Display Name</th>
               <th>Date</th>
               <th>Order ID</th>
               <th>Service Type</th>
@@ -101,8 +103,9 @@ const ManageOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map(order => (
+            {currentItems.map((order, index) => (
               <tr key={order.orderId}>
+                <td>{indexOfFirstItem + index + 1}</td>
                 <td>
                   <div className="avatar-container">
                     <div className="avatar-wrapper">

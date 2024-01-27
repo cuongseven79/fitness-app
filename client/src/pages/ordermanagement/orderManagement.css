@@ -1,6 +1,6 @@
 .notFound__container {
     text-align: center;
-    padding-top: 5rem;
+    padding-top: 1rem;
   }
   
   .notFound__container .btn {
@@ -9,11 +9,11 @@
   }
   
   .m-top-20px {
-    margin-top: 20px;
+    margin-top: 10px;
   }
   
   .container {
-    max-width: 800px; /* Increased max-width for better readability */
+    max-width: 700px; /* Increased max-width for better readability */
     margin: 0 auto;
     padding: 20px;
   }
@@ -45,19 +45,7 @@
     margin-right: 50px;
   }
   
-  button {
-    background-color: #4caf50;
-    color: #fff;
-    padding: 10px 20px; /* Adjusted padding for a cleaner button */
-    border: 2px solid #3498db;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
   
-  button:hover {
-    background-color: #3498db;
-  }
   
   .orders-table {
     width: 100%;
@@ -101,13 +89,7 @@
     margin-bottom: 20px;
   }
   
-  .pagination {
-    margin-top: 20px;
-  }
   
-  .pagination-btn {
-    margin-right: 20px;
-  }
   
   .avatar-wrapper {
     width: 50px;
@@ -120,3 +102,87 @@
     display: flex;
     align-items: center;
   }
+
+  .total-money {
+    float: right;
+    font-size: 24px;
+    margin-bottom: 20px;
+    background-color: #3498db;
+    padding: 10px 15px;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .total-money span {
+    font-weight: bold;
+  }
+
+  
+  
+  .button {
+    background: linear-gradient(to right, #3498db, #2980b9);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    font-size: 16px;
+    font-weight: bold;
+    outline: none;
+    display: inline-block;
+    margin-top: 20px;
+    text-align: center;
+    text-decoration: none; /* Remove default hyperlink styling */
+    margin-top: -10px;
+  }
+  
+  .button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+  }
+
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .pagination-btn {
+    margin-right: 10px;
+    background: #3498db;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .pagination-btn:hover {
+    background: #2980b9;
+  }
+  
+  .pagination-btn.active {
+    background: #2980b9;
+  }
+  
+  .pagination-btn:disabled {
+    background: #b0abab;
+    cursor: not-allowed;
+  }
+  
+  
+  
+  
+  
+
+  
+  
