@@ -40,5 +40,5 @@ const handlePostOrder = async(req,res) => {
 }
   
 router.get('/', handleGetOrder);
-router.post('/manage-order', handlePostOrder);
+router.post('/manage-orders', handlePostOrder);
 module.exports = router;

@@ -60,13 +60,13 @@
   }
   
   .orders-table th {
-    background-color: #3498db;
+    background: var(--color-primary);
     color: white;
   }
   
   .orders-table tbody tr:hover {
-    background-color: #b0abab;
-  }
+    background-color: #f0f0f0; /* Light gray color */
+}
   
   .btn {
     display: inline-block;
@@ -178,6 +178,33 @@
     background: #b0abab;
     cursor: not-allowed;
   }
+
+  /* Existing styles... */
+
+.date-filter {
+  display: flex;
+  align-items: center; /* Center items vertically */
+  margin-bottom: 20px;
+}
+
+.margin-right-50 {
+  margin-right: 50px;
+}
+
+.margin-right-50 label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.margin-right-50 input {
+  border: 1px solid #3498db;
+  border-radius: 5px;
+  padding: 10px; /* Adjusted padding for better appearance */
+  font-size: 14px; /* Adjusted font size for better visibility */
+}
+
+/* Existing styles... */
+
   
   
   

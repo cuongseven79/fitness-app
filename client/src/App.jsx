@@ -38,7 +38,7 @@ const App = () => {
 				<Route path="trainers" element={<Trainers />} />
 				{userSection && <Route path="profile/:id" element={<Profile />} />}
 				{userSection?.role === 'admin' && <Route path="manage-customers" element={<Login />} />}
-				{userSection?.role === 'admin' && <Route path="manage-order" element={<ManageOrders  />} />}
+				{userSection?.role === 'admin' && <Route path="manage-orders" element={<ManageOrders  />} />}
 				<Route path="login" element={<Login />} />
 				<Route path="signup" element={<SignUp />} />
 				<Route path="*" element={<NotFound />} />

@@ -69,7 +69,6 @@ const ManageOrders = () => {
       <h2>Manage Orders</h2>
       <div className="container">
         <div className="date-filter">
-          <p className="Filter bold-text">Filter By:</p>
           <div className="margin-right-50">
             <label>From Date: </label>
             <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
