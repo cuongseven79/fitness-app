@@ -3,11 +3,9 @@ import SectionHead from "./SectionHead";
 import { ImQuotesLeft } from "react-icons/im";
 import avatar from "../images/avatar1.jpg";
 import Card from "./Card";
-import {
-	IoIosArrowDropleftCircle,
-	IoIosArrowDroprightCircle,
-} from "react-icons/io";
 import { getDataDashboard } from "../api/homeService";
+import loadingGIF from "../images/loading.gif";
+import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
 
 const TestimonialCard = ({ feedback }) => (
 	<Card className="testimonial">
@@ -47,6 +45,9 @@ const Testimonial = () => {
 	useEffect(() => {
 		fetchTestimonial();
 	}, [])
+	if (!testimonials.length) {
+		<img className="w-20 " src={loadingGIF} alt="Loading" />
+	}
 	return (
 		<section className="testimonials">
 			<div className="container ">

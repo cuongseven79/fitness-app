@@ -4,10 +4,6 @@ import { LiaDumbbellSolid } from "react-icons/lia";
 import { GiHighPunch } from "react-icons/gi";
 import { GrYoga } from "react-icons/gr";
 import { TbYoga } from "react-icons/tb";
-import PT1 from './images/trainer1.jpg'
-import PT2 from './images/trainer2.jpg'
-import PT3 from './images/trainer3.jpg'
-import PT4 from './images/trainer4.jpg'
 
 /* ==================== LINKS DATA  ====================*/
 export const links = [
@@ -37,9 +33,6 @@ export const links = [
     },
    
 ]
-
-
-
 
 /* ==================== PROGRAM DATA  ====================*/
 

@@ -87,7 +87,11 @@
     border-radius: 2rem;
     font-size: 1.1rem;
 }
-
+.btn.md {
+    padding: 0.8rem 3rem;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+}
 .btn.sm {
     padding: 0.4rem 1.2rem;
     font-size: 0.9rem;

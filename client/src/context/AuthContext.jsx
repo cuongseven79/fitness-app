@@ -15,32 +15,6 @@ export function AuthProvider({ children }) {
 	const [currentUser, setCurrentUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
-
-	// async function signInWithFacebook() {
-	// 	try {
-	// 		const res = await signInWithPopup(auth, facebookProvider);
-	// 		const { displayName, email, phoneNumber, photoURL, uid } = res.user;
-
-	// 		onAuthStateChanged(auth, async (user) => {
-	// 			if (user) {
-	// 				const Users = doc(database, "Users", uid);
-	// 				if (!(await getDoc(Users)).exists()) {
-	// 					await setDoc(Users, {
-	// 						fullname: displayName,
-	// 						email: email,
-	// 						phoneNumber: phoneNumber,
-	// 						photoURL: photoURL,
-	// 					});
-	// 				}
-	// 			} else {
-	// 				// User is signed out
-	// 				console.log('User is not signed in');
-	// 			}
-	// 		});
-	// 	} catch (error) {
-	// 		console.error('An error occurred during sign in with Facebook:', error.message, 'Error code:', error.code);
-	// 	}
-	// }
 	async function signInWithGoogle() {
 		try {
 			const res = await signInWithPopup(auth, googleProvider);
@@ -151,9 +125,6 @@ export function AuthProvider({ children }) {
 		signInWithGoogle,
 		signUp,
 		getUsers,
-		// signInWithFacebook,
-		// updateUserInfo,
-		// updateUserPassword,
 		resetPassword,
 	};
 
