@@ -18,9 +18,9 @@ const handleCreatedPayment = async (req, res) => {
 	var returnUrl = process.env.VPN_RETURN;
 
 	var createdAt = dayjs().format('YYYYMMDDHHmmss');
-	var amount = req.body.amount;
-	var orderInfo = req.body.orderDescription;
-	var orderType = req.body.orderType;
+	var amount = req.body.vndPrice;
+	var orderInfo = req.body.desc;
+	var orderType = 250000;
 	var currCode = 'VND';
 	var vnp_Params = {};
 	vnp_Params['vnp_Version'] = '2.1.0';

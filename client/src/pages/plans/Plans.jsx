@@ -4,15 +4,29 @@ import { plans } from "../../data";
 import Header from "../../components/Header";
 import HeaderImage from "../../images/header_bg_4.jpg";
 import Card from "../../components/Card";
+import { createPayment } from "../../api/ordersService";
+
+
+function convertUSDtoVND(amountUSD) {
+  const amountVND = amountUSD * 24000;
+  const roundedAmountVND = Math.round(amountVND * 100) / 100;
+  return roundedAmountVND;
+}
 
 const Plans = () => {
 	useEffect(() => {
 		document.title = `Plants`;
 	}, []);
 
-	function handleClickPlan(e, name, price) {
+	async function handleClickPlan(e, name, desc, price) {
 		e.preventDefault();
-		console.log(name, price)
+		const vndPrice = convertUSDtoVND(price)
+		const res = await createPayment({name, desc, vndPrice});
+		if (res.url) {
+			window.location.replace(res.url);
+		} else {
+			return
+		}
 	}
 	return (
 		<>
