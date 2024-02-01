@@ -22,28 +22,18 @@
     font-weight: bold;
   }
   
-  h2 {
-    max-width: 800px; /* Adjusted max-width for consistency */
-    padding: 20px;
-  }
-  
-  .date-filter {
-    display: flex;
-    margin-bottom: 20px; /* Increased margin for better spacing */
-  }
-  
-  .Filter {
-    margin-right: 20px;
-  }
-  
-  .date-filter label {
+  .font {
+    font-size: 30px;
     font-weight: bold;
-    margin-right: 10px;
+    text-transform: uppercase;
+    max-width: 800px;
+    padding: 10px 15px;
+    color: white;
+     /* Chọn một màu sáng, ví dụ: trắng */
   }
   
-  .margin-right-50 {
-    margin-right: 50px;
-  }
+  
+  
   
   
   
@@ -56,7 +46,9 @@
   .orders-table th, .orders-table td {
     border: 1px solid #ddd;
     padding: 12px;
-    text-align: left;
+    text-align: center;
+    font-weight: bold; /* Make the text bold */
+  font-size: 16px;
   }
   
   .orders-table th {
@@ -64,9 +56,15 @@
     color: white;
   }
   
+  .orders-table tbody tr {
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+  }
+  
   .orders-table tbody tr:hover {
-    background-color: #f0f0f0; /* Light gray color */
-}
+    background-color: #3d81b55c;
+    
+  }
+  
   
   .btn {
     display: inline-block;
@@ -82,12 +80,7 @@
   .btn:hover {
     background-color: #3498db;
   }
-  
-  .total-money {
-    float: right;
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
+ 
   
   
   
@@ -105,7 +98,7 @@
 
   .total-money {
     float: right;
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 20px;
     background-color: #3498db;
     padding: 10px 15px;
@@ -127,15 +120,15 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    font-size: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 14px;
     font-weight: bold;
     outline: none;
     display: inline-block;
-    margin-top: 20px;
     text-align: center;
     text-decoration: none; /* Remove default hyperlink styling */
-    margin-top: -10px;
+    margin-top: 1px;
+    margin-left: 30px;
   }
   
   .button:hover {
@@ -147,6 +140,32 @@
     transform: scale(0.95);
     box-shadow: none;
   }
+
+  
+  .button1{
+    background: linear-gradient(to right, #3498db, #2980b9);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 14px;
+    font-weight: bold;
+    outline: none;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none; /* Remove default hyperlink styling */
+    margin-top: 1px;
+    margin-left: 10px;
+  }
+
+ 
+  .button1:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
 
   .pagination {
     margin-top: 20px;
@@ -167,11 +186,11 @@
   }
   
   .pagination-btn:hover {
-    background: #2980b9;
+    background: var(--color-primary);
   }
   
   .pagination-btn.active {
-    background: #2980b9;
+    background: var(--color-primary);
   }
   
   .pagination-btn:disabled {
@@ -188,22 +207,35 @@
 }
 
 .margin-right-50 {
-  margin-right: 50px;
+  margin-right: 15px;
 }
 
 .margin-right-50 label {
   font-weight: bold;
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
 .margin-right-50 input {
   border: 1px solid #3498db;
   border-radius: 5px;
   padding: 10px; /* Adjusted padding for better appearance */
-  font-size: 14px; /* Adjusted font size for better visibility */
+  font-size: 12px; /* Adjusted font size for better visibility */
 }
 
+
+
 /* Existing styles... */
+
+
+
+.avatar-image {
+  width: 50px;  /* Adjust the width as needed */
+  height: 50px; /* Adjust the height as needed */
+  border-radius: 5%;
+  display: block;
+  margin: 0 auto;
+   /* To make it circular */ /* Adjust the margin as needed for spacing */
+}
 
   
   

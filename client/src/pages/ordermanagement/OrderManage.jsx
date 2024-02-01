@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getOrder } from "../../api/orderService";
-import ImageUploader from "../../components/ImageUploadCustom";
 import UserDefaultImage from "../../images/user_profile.png";
 import './orderManagement.css';
 
@@ -12,6 +11,7 @@ const ManageOrders = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleFilter = () => {
+    
     const filterStartDate = startDate ? new Date(startDate) : null;
     const filterEndDate = endDate ? new Date(endDate) : null;
 
@@ -55,6 +55,14 @@ const ManageOrders = () => {
     }
   };
 
+  const handleResetFilter = () => {
+    setStartDate('');
+    setEndDate('');
+    setFilteredOrders(allOrders);
+    setCurrentPage(1);
+  };
+
+
   useEffect(() => {
     document.title = 'Admin Page: Manage Orders';
     fetchOrders();
@@ -64,24 +72,30 @@ const ManageOrders = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
 
+  
+  
+
   return (
     <section>
-      <h2>Manage Orders</h2>
+      <span className='font'>Manage Orders</span>
       <div className="container">
         <div className="date-filter">
           <div className="margin-right-50">
-            <label>From Date: </label>
+            <label>From: </label>
             <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
           </div>
 
           <div className="margin-right-50">
-            <label>To Date: </label>
+            <label>To: </label>
             <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
           </div>
 
           <button className="button" onClick={handleFilter}>
   Filter
 </button>
+<button className="button" onClick={handleResetFilter}>
+            Reset Filter
+          </button>
         </div>
 
         <div className="total-money">
@@ -106,12 +120,7 @@ const ManageOrders = () => {
               <tr key={order.orderId}>
                 <td>{indexOfFirstItem + index + 1}</td>
                 <td>
-                  <div className="avatar-container">
-                    <div className="avatar-wrapper">
-                      <ImageUploader defaultImage={`${order.photoURL ? order.photoURL : UserDefaultImage}`} typeImage={"photo"} />
-                    </div>
-                    <span>{order.displayName}</span>
-                  </div>
+                {order.displayName}
                 </td>
                 <td>{new Date(order.date._seconds * 1000).toLocaleDateString()}</td>
                 <td>{order.orderId}</td>
