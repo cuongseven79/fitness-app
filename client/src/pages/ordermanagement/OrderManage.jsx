@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { getOrder } from '../../api/orderService';
 import './orderManagement.css';
+import loadingGIF from "../../images/loading.gif";
 
 const formatDate = timestamp => {
   const date = new Date(timestamp * 1000);
@@ -18,31 +19,40 @@ const ManageOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false); // Initially set to false
 
-  const handleFilter = () => {
+  const handleFilter = async () => {
+    if (loading) {
+      // If loading is true, exit the function to prevent multiple requests
+      return;
+    }
+  
     const filterStartDate = startDate ? startDate.getTime() / 1000 : null;
     const filterEndDate = endDate ? endDate.getTime() / 1000 : null;
-
-    const filteredOrders = allOrders.filter(order => {
-      const orderTimestamp = order.date._seconds;
-
-      if (filterStartDate && orderTimestamp < filterStartDate) {
-        return false;
+  
+    try {
+      setLoading(true);
+      const { statusCode, ordersData } = await getOrder();
+      if (ordersData && statusCode === 200) {
+        const sortedOrders = ordersData.sort((a, b) => a.date._seconds - b.date._seconds);
+        setAllOrders(sortedOrders);
+        const filteredOrders = sortedOrders.filter(order => {
+          const orderTimestamp = order.date._seconds;
+          if (filterStartDate && orderTimestamp < filterStartDate) return false;
+          if (filterEndDate && orderTimestamp > filterEndDate) return false;
+          return true;
+        });
+        setFilteredOrders(filteredOrders);
       }
-
-      if (filterEndDate && orderTimestamp > filterEndDate) {
-        return false;
-      }
-
-      return true;
-    });
-
-    setFilteredOrders(filteredOrders);
-    setCurrentPage(1);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const totalMoney = filteredOrders.reduce((total, order) => total + parseFloat(order.paid_money), 0);
 
+  const totalMoney = filteredOrders.reduce((total, order) => total + parseFloat(order.paid_money), 0);
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -50,127 +60,116 @@ const ManageOrders = () => {
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
   const visiblePageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-  const handlePageChange = page => {
-    setCurrentPage(page);
-  };
-
-  const fetchOrders = async () => {
-    try {
-      const { statusCode, ordersData } = await getOrder();
-      if (ordersData && statusCode === 200) {
-        const sortedOrders = ordersData.sort((a, b) => a.date._seconds - b.date._seconds);
-        setAllOrders(sortedOrders);
-        setFilteredOrders(sortedOrders);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const handlePageChange = page => setCurrentPage(page);
 
   const handleResetFilter = () => {
     setStartDate(null);
     setEndDate(null);
     setFilteredOrders(allOrders);
     setCurrentPage(1);
+    
   };
 
   useEffect(() => {
     document.title = 'Admin Page: Manage Orders';
-    fetchOrders();
-  }, []);
+    handleFilter();
+  }, []); // Fetch data on initial mount
 
   return (
     <section>
-      <span className='font'>Manage Orders</span>
-      <div className="container">
-        <div className="date-filter">
-          <div className="margin-right-50">
-            <label>From: </label>
-            <DatePicker
-              selected={startDate}
-              onChange={date => setStartDate(date)}
-              dateFormat="dd/MM/yyyy"
-              placeholderText="dd/mm/yyyy"
-            />
-          </div>
-          <div className="margin-right-50">
-            <label>To: </label>
-            <DatePicker
-              selected={endDate}
-              onChange={date => setEndDate(date)}
-              dateFormat="dd/MM/yyyy"
-              placeholderText="dd/mm/yyyy"
-            />
-          </div>
-
-          <button className="button" onClick={handleFilter}>
-            Filter
-          </button>
-          <button className="button1 reset-button" onClick={handleResetFilter}>
-            Reset Filter
-          </button>
+      {loading ? (
+        <div className="loading-container">
+          <img src={loadingGIF} alt="Loading" style={{ width: '150px', height: '150px', display: 'block', margin: 'auto' }} />
         </div>
-
-        <div className="total-money">
-  <p>Total Money: <span className="total-amount">${totalMoney.toFixed()}</span></p>
-</div>
-
-
-        <table className="orders-table">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Display Name</th>
-              <th>Date</th>
-              <th>Order ID</th>
-              <th>Service Type</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Paid Money</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentOrders.map((order, index) => (
-              <tr key={order.orderId}>
-                <td>{startIndex + index + 1}</td>
-                <td>{order.displayName}</td>
-                <td>{formatDate(order.date._seconds)}</td>
-                <td>{order.orderId}</td>
-                <td>{order.service_type}</td>
-                <td>{formatDate(order.start_time._seconds)}</td>
-                <td>{formatDate(order.end_time._seconds)}</td>
-                <td>{order.paid_money}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className="pagination">
-          <button
-            className="pagination-btn"
-            onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          {visiblePageNumbers.map(pageNumber => (
-            <button
-              key={pageNumber}
-              className={`pagination-btn ${pageNumber === currentPage ? 'active' : ''}`}
-              onClick={() => handlePageChange(pageNumber)}
-            >
-              {pageNumber}
-            </button>
-          ))}
-          <button
-            className="pagination-btn"
-            onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      ) : (
+        <>
+          <span className='font'>Manage Orders</span>
+          <div className="container">
+            <div className="date-filter">
+              <div className="margin-right-50">
+                <label>From: </label>
+                <DatePicker
+                  selected={startDate}
+                  onChange={date => setStartDate(date)}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="dd/mm/yyyy"
+                />
+              </div>
+              <div className="margin-right-50">
+                <label>To: </label>
+                <DatePicker
+                  selected={endDate}
+                  onChange={date => setEndDate(date)}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="dd/mm/yyyy"
+                />
+              </div>
+              <button className="button" onClick={handleFilter}>
+                Filter
+              </button>
+              <button className="button1 reset-button" onClick={handleResetFilter}>
+                Reset Filter
+              </button>
+            </div>
+            <div className="total-money">
+              <p>Total Money: <span className="total-amount">${totalMoney.toFixed()}</span></p>
+            </div>
+            <table className="orders-table">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Display Name</th>
+                  <th>Date</th>
+                  <th>Order ID</th>
+                  <th>Service Type</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th>Paid Money</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentOrders.map((order, index) => (
+                  <tr key={order.orderId}>
+                    <td>{startIndex + index + 1}</td>
+                    <td>{order.displayName}</td>
+                    <td>{formatDate(order.date._seconds)}</td>
+                    <td>{order.orderId}</td>
+                    <td>{order.service_type}</td>
+                    <td>{formatDate(order.start_time._seconds)}</td>
+                    <td>{formatDate(order.end_time._seconds)}</td>
+                    <td>{order.paid_money}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="pagination">
+              <button
+                className="pagination-btn"
+                onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              {visiblePageNumbers.map(pageNumber => (
+                <button
+                  key={pageNumber}
+                  className={`pagination-btn ${pageNumber === currentPage ? 'active' : ''}`}
+                  onClick={() => handlePageChange(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+              <button
+                className="pagination-btn"
+                onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 };
