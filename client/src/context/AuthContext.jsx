@@ -3,7 +3,7 @@ import { addUser, getAllUsers, verifyLogin } from "../api/authService";
 import { auth, database, googleProvider } from "../config/firebase-config";
 import { onAuthStateChanged, sendPasswordResetEmail, signInWithPopup } from "firebase/auth";
 import { getDoc, setDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
-
+import { collection, getDocs } from "firebase/firestore";
 
 
 const AuthContext = createContext();
@@ -109,6 +109,21 @@ export function AuthProvider({ children }) {
 		return getAllUsers();
 	}
 
+	async function fetchUsersData() {
+		try {
+		  const usersCollection = collection(database, "Users");
+		  const usersSnapshot = await getDocs(usersCollection);
+		  const usersData = usersSnapshot.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data(),
+		  }));
+		  return usersData.filter((user) => user.role !== "admin");
+		} catch (error) {
+		  console.error("Error fetching users:", error);
+		  return [];
+		}
+	  }
+
 	// useEffect(() => {
 	// 	const unsubscribe = onAuthStateChanged(auth, (user) => {
 	// 		setCurrentUser(user);
@@ -126,6 +141,7 @@ export function AuthProvider({ children }) {
 		signUp,
 		getUsers,
 		resetPassword,
+		fetchUsersData,
 	};
 
 	return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

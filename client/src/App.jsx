@@ -17,6 +17,7 @@ import SignUp from "./pages/signup/SignUp";
 // check Role
 import { useAuth } from "./context/AuthContext";
 import { userSection } from "./utils/checkRole";
+import ManageUsers from "./pages/admin/Manage_User";
 
 const App = () => {
 	
@@ -35,6 +36,7 @@ const App = () => {
 				<Route path="gallery" element={<Gallery />} />
 				<Route path="plans" element={<Plans />} />
 				<Route path="trainers" element={<Trainers />} />
+				<Route path="manage-users" element={<ManageUsers />} />
 				{userSection && <Route path="profile/:id" element={<Profile />} />}
 				{userSection?.role === 'admin' && <Route path="manage-customers" element={<Login />} />}
 				<Route path="login" element={<Login />} />

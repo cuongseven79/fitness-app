@@ -1,0 +1,42 @@
+.table-container {
+    margin-top: 10px;
+    border: 5px solid #000;
+    border-radius: 10px;
+  }
+  
+  .ant-table {
+    background-color: #fff; 
+  }
+  
+  .ant-table-thead > tr > th {
+    background-color: #000; 
+    color: #fff; 
+    border: 1px solid #000;
+  }
+  
+  .ant-table-tbody > tr > td {
+    border: 1px solid #000;
+  }
+  
+  .ant-pagination {
+    margin-top: 10px;
+  }
+  
+  .ant-pagination-item-active a {
+    
+    border-color: #000;
+    color: #fff; 
+  }
+  
+  .ant-pagination-item a {
+    color: #000; 
+  }
+
+  .ant-table-cell {
+    text-align: center;
+  }
+  
+  .ant-table-thead th {
+    text-align: center !important;
+  }
+  
