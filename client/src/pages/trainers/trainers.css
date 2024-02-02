@@ -40,7 +40,12 @@
 .trainer:hover a {
     background: var(--color-gray-500);
 }
-
+.selected {
+    background: 
+    #0080ff;
+    color: white;
+  }
+  
  
 /* MEDIA QUERIES (medium sxreen) */
 @media screen and (max-width: 1024px){
