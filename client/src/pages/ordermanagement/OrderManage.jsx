@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { getOrder } from "../../api/orderService";
-import UserDefaultImage from "../../images/user_profile.png";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { getOrder } from '../../api/orderService';
 import './orderManagement.css';
 
+const formatDate = timestamp => {
+  const date = new Date(timestamp * 1000);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const ManageOrders = () => {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [allOrders, setAllOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleFilter = () => {
-    
-    const filterStartDate = startDate ? new Date(startDate) : null;
-    const filterEndDate = endDate ? new Date(endDate) : null;
+    const filterStartDate = startDate ? startDate.getTime() / 1000 : null;
+    const filterEndDate = endDate ? endDate.getTime() / 1000 : null;
 
     const filteredOrders = allOrders.filter(order => {
-      const orderTimestamp = order.date._seconds * 1000; // Convert to milliseconds
+      const orderTimestamp = order.date._seconds;
 
-      if (filterStartDate && orderTimestamp < filterStartDate.getTime()) {
+      if (filterStartDate && orderTimestamp < filterStartDate) {
         return false;
       }
 
-      if (filterEndDate && orderTimestamp > filterEndDate.getTime()) {
+      if (filterEndDate && orderTimestamp > filterEndDate) {
         return false;
       }
 
@@ -36,6 +44,9 @@ const ManageOrders = () => {
   const totalMoney = filteredOrders.reduce((total, order) => total + parseFloat(order.paid_money), 0);
 
   const itemsPerPage = 5;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentOrders = filteredOrders.slice(startIndex, endIndex);
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
   const visiblePageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
@@ -47,8 +58,9 @@ const ManageOrders = () => {
     try {
       const { statusCode, ordersData } = await getOrder();
       if (ordersData && statusCode === 200) {
-        setAllOrders(ordersData);
-        setFilteredOrders(ordersData);
+        const sortedOrders = ordersData.sort((a, b) => a.date._seconds - b.date._seconds);
+        setAllOrders(sortedOrders);
+        setFilteredOrders(sortedOrders);
       }
     } catch (error) {
       console.log(error);
@@ -56,24 +68,16 @@ const ManageOrders = () => {
   };
 
   const handleResetFilter = () => {
-    setStartDate('');
-    setEndDate('');
+    setStartDate(null);
+    setEndDate(null);
     setFilteredOrders(allOrders);
     setCurrentPage(1);
   };
-
 
   useEffect(() => {
     document.title = 'Admin Page: Manage Orders';
     fetchOrders();
   }, []);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
-
-  
-  
 
   return (
     <section>
@@ -82,25 +86,35 @@ const ManageOrders = () => {
         <div className="date-filter">
           <div className="margin-right-50">
             <label>From: </label>
-            <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+            <DatePicker
+              selected={startDate}
+              onChange={date => setStartDate(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/mm/yyyy"
+            />
           </div>
-
           <div className="margin-right-50">
             <label>To: </label>
-            <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+            <DatePicker
+              selected={endDate}
+              onChange={date => setEndDate(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/mm/yyyy"
+            />
           </div>
 
           <button className="button" onClick={handleFilter}>
-  Filter
-</button>
-<button className="button" onClick={handleResetFilter}>
+            Filter
+          </button>
+          <button className="button1 reset-button" onClick={handleResetFilter}>
             Reset Filter
           </button>
         </div>
 
         <div className="total-money">
-        <p><span>Total Money:</span> $ {totalMoney.toFixed(2)}</p>
-        </div>
+  <p>Total Money: <span className="total-amount">${totalMoney.toFixed()}</span></p>
+</div>
+
 
         <table className="orders-table">
           <thead>
@@ -116,17 +130,15 @@ const ManageOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((order, index) => (
+            {currentOrders.map((order, index) => (
               <tr key={order.orderId}>
-                <td>{indexOfFirstItem + index + 1}</td>
-                <td>
-                {order.displayName}
-                </td>
-                <td>{new Date(order.date._seconds * 1000).toLocaleDateString()}</td>
+                <td>{startIndex + index + 1}</td>
+                <td>{order.displayName}</td>
+                <td>{formatDate(order.date._seconds)}</td>
                 <td>{order.orderId}</td>
                 <td>{order.service_type}</td>
-                <td>{new Date(order.start_time._seconds * 1000).toLocaleDateString()}</td>
-                <td>{new Date(order.end_time._seconds * 1000).toLocaleDateString()}</td>
+                <td>{formatDate(order.start_time._seconds)}</td>
+                <td>{formatDate(order.end_time._seconds)}</td>
                 <td>{order.paid_money}</td>
               </tr>
             ))}
