@@ -19,30 +19,26 @@ const ManageOrders = () => {
   const [allOrders, setAllOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false); // Initially set to false
+  const [loading, setLoading] = useState(false);
 
   const handleFilter = async () => {
-    if (loading) {
-      // If loading is true, exit the function to prevent multiple requests
-      return;
-    }
-  
+    if (loading) return;
+
     const filterStartDate = startDate ? startDate.getTime() / 1000 : null;
     const filterEndDate = endDate ? endDate.getTime() / 1000 : null;
-  
+
     try {
       setLoading(true);
       const { statusCode, ordersData } = await getOrder();
       if (ordersData && statusCode === 200) {
         const sortedOrders = ordersData.sort((a, b) => a.date._seconds - b.date._seconds);
         setAllOrders(sortedOrders);
-        const filteredOrders = sortedOrders.filter(order => {
+        setFilteredOrders(sortedOrders.filter(order => {
           const orderTimestamp = order.date._seconds;
           if (filterStartDate && orderTimestamp < filterStartDate) return false;
           if (filterEndDate && orderTimestamp > filterEndDate) return false;
           return true;
-        });
-        setFilteredOrders(filteredOrders);
+        }));
       }
     } catch (error) {
       console.log(error);
@@ -50,6 +46,18 @@ const ManageOrders = () => {
       setLoading(false);
     }
   };
+
+  const handleResetFilter = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setFilteredOrders(allOrders);
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    document.title = 'Manage Orders';
+    handleFilter();
+  }, []);
 
   const totalMoney = filteredOrders.reduce((total, order) => total + parseFloat(order.paid_money), 0);
   const itemsPerPage = 5;
@@ -61,18 +69,6 @@ const ManageOrders = () => {
 
   const handlePageChange = page => setCurrentPage(page);
 
-  const handleResetFilter = () => {
-    setStartDate(null);
-    setEndDate(null);
-    setFilteredOrders(allOrders);
-    setCurrentPage(1);
-  };
-
-  useEffect(() => {
-    document.title = 'Admin Page: Manage Orders';
-    handleFilter();
-  }, []); // Fetch data on initial mount
-
   return (
     <section>
       <span className='font'>Manage Orders</span>
@@ -81,88 +77,86 @@ const ManageOrders = () => {
           <div className="margin-right-50">
             <label>From: </label>
             <DatePicker
-            selected={startDate}
-            onChange={date => setStartDate(date)}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="dd/mm/yyyy"
-          />
+              selected={startDate}
+              onChange={date => setStartDate(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/mm/yyyy"
+              className='font-sans'
+            />
+          </div>
+          <div className="margin-right-50">
+            <label>To: </label>
+            <DatePicker
+              selected={endDate}
+              onChange={date => setEndDate(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/mm/yyyy"
+              className='font-sans'
+            />
+          </div>
+          <div className='px-3 gap-6'>
+            <button className="mr-3 rounded-lg py-2 px-6 text-white bg-[#3281F7] hover:bg-blue-600" onClick={handleFilter}>Filter</button>
+            <button className="rounded-lg py-2 px-6 text-white bg-[#9da9bb] hover:bg-[#5a5e64]" onClick={handleResetFilter}>Reset</button>
+          </div>
         </div>
-        <div className="margin-right-50">
-          <label>To: </label>
-          <DatePicker
-            selected={endDate}
-            onChange={date => setEndDate(date)}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="dd/mm/yyyy"
-          />
+        <div className="total-money">
+          <p>Total Money: <span className="total-amount">${totalMoney.toFixed()}</span></p>
         </div>
-        <button className="button" onClick={handleFilter}>
-          Filter
-        </button>
-        <button className="button1 reset-button" onClick={handleResetFilter}>
-          Reset Filter
-        </button>
-      </div>
-      <div className="total-money">
-        <p>Total Money: <span className="total-amount">${totalMoney.toFixed()}</span></p>
-      </div>
-
-      {loading && (
-        <div className="loading-container">
-          <img src={loadingGIF} alt="Loading" style={{ width: '150px', height: '150px', display: 'block', margin: 'auto' }} />
-        </div>
-      )}
-
-      {!loading && (
-        <>
-          <table className="orders-table">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Display Name</th>
-                <th>Date</th>
-                <th>Order ID</th>
-                <th>Service Type</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Paid Money</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentOrders.map((order, index) => (
-                <tr key={order.orderId}>
-                  <td>{startIndex + index + 1}</td>
-                  <td>{order.displayName}</td>
-                  <td>{formatDate(order.date._seconds)}</td>
-                  <td>{order.orderId}</td>
-                  <td>{order.service_type}</td>
-                  <td>{formatDate(order.start_time._seconds)}</td>
-                  <td>{formatDate(order.end_time._seconds)}</td>
-                  <td>{order.paid_money}</td>
+        {loading && (
+          <div className="loading-container">
+            <img src={loadingGIF} alt="Loading" style={{ width: '150px', height: '150px', display: 'block', margin: 'auto' }} />
+          </div>
+        )}
+        {!loading && (
+          <>
+            <table className="orders-table">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Display Name</th>
+                  <th>Date</th>
+                  <th>Order ID</th>
+                  <th>Service Type</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th>Paid Money</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="pagination">
-            <button
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            {visiblePageNumbers.map(pageNumber => (
+              </thead>
+              <tbody>
+                {currentOrders.map((order, index) => (
+                  <tr key={order.orderId}>
+                    <td>{startIndex + index + 1}</td>
+                    <td>{order.displayName}</td>
+                    <td>{formatDate(order.date._seconds)}</td>
+                    <td>{order.orderId}</td>
+                    <td>{order.service_type}</td>
+                    <td>{formatDate(order.start_time._seconds)}</td>
+                    <td>{formatDate(order.end_time._seconds)}</td>
+                    <td>{order.paid_money}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="pagination">
               <button
-                key={pageNumber}
-                className={`pagination-btn ${pageNumber === currentPage ? 'active' : ''}`}
-                onClick={() => handlePageChange(pageNumber)}
+                className="pagination-btn"
+                onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+                disabled={currentPage === 1}
               >
-                {pageNumber}
+                Previous
               </button>
-            ))}
-            <button
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+              {visiblePageNumbers.map(pageNumber => (
+                <button
+                  key={pageNumber}
+                  className={`pagination-btn ${pageNumber === currentPage ? 'active' : ''}`}
+                  onClick={() => handlePageChange(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+              <button
+                className="pagination-btn"
+                onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
                 disabled={currentPage === totalPages}
               >
                 Next
@@ -170,7 +164,6 @@ const ManageOrders = () => {
             </div>
           </>
         )}
-
       </div>
     </section>
   );
