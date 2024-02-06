@@ -24,13 +24,17 @@ export const Payment = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchResultPayment = async () => {
-    const res = await getPaymentResult(queryResult);
+    const getInfoUser = JSON.parse(sessionStorage.getItem('user'));
+    const userId = getInfoUser.userId;
+    const res = await getPaymentResult(queryResult, userId);
     if (res.RspCode === '00') {
       setModalTitle('Success');
       setModalBody('Payment success!');
     } else {
       setModalTitle('Error');
-      setModalBody('Payment failed!');
+      res.RspCode === '99'
+        ? setModalBody('Payment existed!')
+        : setModalBody('Payment failed!');
     }
     setShowDialog(true);
   };

@@ -10,7 +10,10 @@ export const createPayment = async (formData) => {
   return res.data;
 };
 
-export const getPaymentResult = async (params) => {
-  const res = await axios.get(API_URL + '/payment/vnpay-ipn', { params });
+export const getPaymentResult = async (params, userId) => {
+  params.userId = userId;
+  const res = await axios.get(API_URL + `/payment/vnpay-ipn`, {
+    params,
+  });
   return res.data;
 };
